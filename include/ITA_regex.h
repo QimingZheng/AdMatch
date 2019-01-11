@@ -8,7 +8,7 @@ typedef unsigned short int ITA_FLAGS;
 #define TKO_KERNEL (1 << 2)
 #define PROFILER_MODE (1 << 3)
 
-void Scan(ITA_FLAGS flag, char *nfa, unsigned char *text, bool &result);
+void Scan(ITA_FLAGS flag, char *nfa, char *text, bool &result);
 
 void BatchedScan(ITA_FLAGS flag, char *nfa, unsigned char *text, int *text_len, int str_count, bool *result);
 
