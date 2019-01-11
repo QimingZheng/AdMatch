@@ -1,5 +1,4 @@
 #include "src/nfa_kernels.h"
-#include "src/kernel_common.h"
 
 // iNFAnt traversal algorithm to process multiple strings on a NFA
 // input                        :  total input string 

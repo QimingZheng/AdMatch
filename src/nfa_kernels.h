@@ -8,6 +8,7 @@
 
 #include "src/transition_graph.h"
 #include "src/common.h"
+#include "src/kernel_common.h"
 
 using namespace std;
 

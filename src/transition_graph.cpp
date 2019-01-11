@@ -13,7 +13,7 @@
 
 using namespace boost;
 
-bool cmp(pair<int, set<Transition>> &a, pair<int, set<Transition>> &b) {
+bool cmp(const pair<int, set<Transition>> &a, const pair<int, set<Transition>> &b) {
     return a.second.size() > b.second.size();
 }
 

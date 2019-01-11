@@ -24,10 +24,10 @@ $(TARGET) : ${CPP_OBJ} ${CUDA_OBJ}
 	$(CC) $(CCFLAGS) -shared -o $(TARGET) ${CPP_OBJ} ${CUDA_OBJ} $(DYN_LIB)
 
 ${CPP_OBJ}: %.o : %.cpp
-	$(CC) $(CCFLAGS) -c -o $@ $<
+	$(CC) $(CCFLAGS) -dc -c -o $@ $<
 
 ${CUDA_OBJ}: %.o : %.cu
-	$(CC) $(CCFLAGS) -c -o $@ $<
+	$(CC) $(CCFLAGS) -dc -c -o $@ $<
 
 title:
 	mkdir -p $(DIR_LIB)
