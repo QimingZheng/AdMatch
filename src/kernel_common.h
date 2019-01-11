@@ -2,6 +2,8 @@
 #define KERNEL_COMMON
 
 #include <iostream>
+#include "src/common.h"
+
 using namespace std;
 
 __device__ bool is_word_char(unsigned char c);
