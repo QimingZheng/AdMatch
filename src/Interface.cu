@@ -24,7 +24,7 @@ void Scan(ITA_FLAGS flag, char *nfa, char *text, bool &result){
 
     if (!tg.load_nfa_file(nfa)) {
         cerr << "Error: load NFA file " << nfa << endl;
-        return EXIT_FAILURE;
+        exit(-1);
     }
 
     unsigned char *h_input_array[1];
