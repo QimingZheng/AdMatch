@@ -2,6 +2,7 @@
 #define KERNEL_COMMON
 
 #include <iostream>
+#include <vector>
 #include "src/common.h"
 
 using namespace std;
@@ -23,6 +24,6 @@ void Profiler(struct timeval start_time,
               cudaEvent_t memcpy_d2h_end,
               cudaEvent_t memfree_start,
               cudaEvent_t memfree_end
-)
+);
 
 #endif
