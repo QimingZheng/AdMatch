@@ -318,8 +318,7 @@ Profiler(timeval start_time,
         memcpy_d2h_start,
         memcpy_d2h_end,
         memfree_start,
-        memfree_end
-);
+        memfree_end)
 
 // Destroy events
 cudaEventDestroy(memalloc_start);
