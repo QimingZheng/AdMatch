@@ -304,7 +304,7 @@ free(h_input);
 
 gettimeofday(&end_time, NULL);
 
-if (show_match_result) show_result(array_size, final_states, accept_rules);
+if (show_match_result) show_results(array_size, final_states, accept_rules);
 
 Profiler(timeval start_time, 
         timeval end_time, 
