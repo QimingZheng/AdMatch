@@ -1,10 +1,5 @@
 #include "src/nfa_kernels.h"
 
-__device__ bool is_word_char_as(unsigned char c)
-{       
-        return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || (c == '_');
-}
-
 // iNFAnt traversal algorithm to process multiple strings on a NFA
 // input                        :  total input string 
 // input_offset                 :  offset of each input string
@@ -52,7 +47,7 @@ __global__ void AS_kernel(unsigned char *input,
                 goto BYPASS_HEAD;
 
         // If the first character is a word character, there is a word boundary before the first character
-        if (!is_word_char_as(input[0]))
+        if (!is_word_char(input[0]))
                 goto BYPASS_HEAD;
         
         // For each transition triggered by word boundary 
@@ -117,8 +112,8 @@ BYPASS_HEAD:
                         continue;
 
                 // If there is NOT a word boundary between input[byt] and input[byt + 1] or after the last character
-                if ((byt < input_bytes - 1 && (is_word_char_as(input[byt]) ^ is_word_char_as(input[byt + 1])) == 0) ||
-                    (byt == input_bytes - 1 && !is_word_char_as(input[input_bytes - 1])))
+                if ((byt < input_bytes - 1 && (is_word_char(input[byt]) ^ is_word_char(input[byt + 1])) == 0) ||
+                    (byt == input_bytes - 1 && !is_word_char(input[input_bytes - 1])))
                         continue;
 
                 // For each transition triggered by word boundary
