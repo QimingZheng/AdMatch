@@ -32,7 +32,7 @@ void Scan(ITA_FLAGS flag, char *nfa, char *text, bool &result){
     h_input_array[0]=(unsigned char*)text;
     input_bytes_array[0]=strlen(text);
 
-    run_nfa(&tg, h_input_array, input_bytes_array, 1, 1024, flag&PROFILER_MODE);
+    run_nfa(&tg, h_input_array, input_bytes_array, 1, 1024, 1, flag&PROFILER_MODE);
 
 }
 

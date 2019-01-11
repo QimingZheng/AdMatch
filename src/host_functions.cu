@@ -21,9 +21,10 @@ void run_nfa(class TransitionGraph *tg,
              int *input_bytes_array,
              int array_size,
              int threads_per_block,
-             bool show_match_result)
+             bool show_match_result,
+             bool profiler_mode)
 {
-        if (tg->kernel == iNFA) run_iNFA(tg, h_input_array, input_bytes_array, array_size, threads_per_block, show_match_result);
-        if (tg->kernel == TKO_NFA) run_TKO(tg, h_input_array, input_bytes_array, array_size, threads_per_block, show_match_result);
-        if (tg->kernel == AS_NFA) run_AS(tg, h_input_array, input_bytes_array, array_size, threads_per_block, show_match_result);
+        if (tg->kernel == iNFA) run_iNFA(tg, h_input_array, input_bytes_array, array_size, threads_per_block, show_match_result, profiler_mode);
+        if (tg->kernel == TKO_NFA) run_TKO(tg, h_input_array, input_bytes_array, array_size, threads_per_block, show_match_result, profiler_mode);
+        if (tg->kernel == AS_NFA) run_AS(tg, h_input_array, input_bytes_array, array_size, threads_per_block, show_match_result, profiler_mode);
 }

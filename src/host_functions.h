@@ -16,6 +16,7 @@ void run_nfa(class TransitionGraph *tg,
              int *input_bytes_array, 
              int array_size,
              int threads_per_block, 
-             bool show_match_result);
+             bool show_match_result,
+             bool profiler_mode);
              
 #endif
