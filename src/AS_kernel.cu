@@ -306,8 +306,8 @@ gettimeofday(&end_time, NULL);
 
 if (show_match_result) show_results(array_size, final_states, accept_rules);
 
-Profiler(timeval start_time, 
-        timeval end_time, 
+Profiler(start_time, 
+        end_time, 
         array_size, 
         memalloc_start, 
         memalloc_end,
@@ -318,7 +318,7 @@ Profiler(timeval start_time,
         memcpy_d2h_start,
         memcpy_d2h_end,
         memfree_start,
-        memfree_end)
+        memfree_end);
 
 // Destroy events
 cudaEventDestroy(memalloc_start);
