@@ -189,18 +189,18 @@ void run_iNFA(class TransitionGraph *tg,
 
     // Create events
     if(profiler_mode){
-    cudaEventCreate(&memalloc_start);
-    cudaEventCreate(&memalloc_end);
-    cudaEventCreate(&memcpy_h2d_start);
-    cudaEventCreate(&memcpy_h2d_end);
-    cudaEventCreate(&kernel_start);
-    cudaEventCreate(&kernel_end);
-    cudaEventCreate(&memcpy_d2h_start);
-    cudaEventCreate(&memcpy_d2h_end);
-    cudaEventCreate(&memfree_start);
-    cudaEventCreate(&memfree_end);
+        cudaEventCreate(&memalloc_start);
+        cudaEventCreate(&memalloc_end);
+        cudaEventCreate(&memcpy_h2d_start);
+        cudaEventCreate(&memcpy_h2d_end);
+        cudaEventCreate(&kernel_start);
+        cudaEventCreate(&kernel_end);
+        cudaEventCreate(&memcpy_d2h_start);
+        cudaEventCreate(&memcpy_d2h_end);
+        cudaEventCreate(&memfree_start);
+        cudaEventCreate(&memfree_end);
 
-    gettimeofday(&start_time, NULL);
+        gettimeofday(&start_time, NULL);
     }
     for (int i = 0; i < array_size; i++) {
             h_input_offset[i] = total_input_bytes;
@@ -288,11 +288,6 @@ void run_iNFA(class TransitionGraph *tg,
             // Remove repeated accept rules for string i
             sort(accept_rules[i].begin(), accept_rules[i].end());
             accept_rules[i].erase(unique(accept_rules[i].begin(), accept_rules[i].end() ), accept_rules[i].end()); 
-            
-            //for (int j = 0; j < accept_rules[i].size(); j++) {
-            //        cout << accept_rules[i][j] << " ";
-            //}
-            //cout << endl;
     } 
 
     // Free device memory
@@ -310,7 +305,7 @@ void run_iNFA(class TransitionGraph *tg,
     free(h_final_st_vec);
     free(h_input);
 
-    gettimeofday(&end_time, NULL);
+    if(profiler_mode) gettimeofday(&end_time, NULL);
 
     if (show_match_result) show_results(array_size, final_states, accept_rules);
 

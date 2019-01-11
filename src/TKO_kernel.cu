@@ -238,18 +238,20 @@ void run_TKO(class TransitionGraph *tg,
         ST_BLOCK *d_init_st_vec, *d_final_st_vec, *d_lim_vec;     // state vectors
 
         // Create events
-        cudaEventCreate(&memalloc_start);
-        cudaEventCreate(&memalloc_end);
-        cudaEventCreate(&memcpy_h2d_start);
-        cudaEventCreate(&memcpy_h2d_end);
-        cudaEventCreate(&kernel_start);
-        cudaEventCreate(&kernel_end);
-        cudaEventCreate(&memcpy_d2h_start);
-        cudaEventCreate(&memcpy_d2h_end);
-        cudaEventCreate(&memfree_start);
-        cudaEventCreate(&memfree_end);
+        if(profiler_mode){
+                cudaEventCreate(&memalloc_start);
+                cudaEventCreate(&memalloc_end);
+                cudaEventCreate(&memcpy_h2d_start);
+                cudaEventCreate(&memcpy_h2d_end);
+                cudaEventCreate(&kernel_start);
+                cudaEventCreate(&kernel_end);
+                cudaEventCreate(&memcpy_d2h_start);
+                cudaEventCreate(&memcpy_d2h_end);
+                cudaEventCreate(&memfree_start);
+                cudaEventCreate(&memfree_end);
 
-        gettimeofday(&start_time, NULL);
+                gettimeofday(&start_time, NULL);
+        }
 
         for (int i = 0; i < array_size; i++) {
                 h_input_offset[i] = total_input_bytes;
@@ -276,7 +278,7 @@ void run_TKO(class TransitionGraph *tg,
         }
         
         // Allocate device memory
-        cudaEventRecord(memalloc_start, 0);
+        if(profiler_mode) cudaEventRecord(memalloc_start, 0);
         cudaMalloc((void **)&d_input, total_input_bytes);
         cudaMalloc((void **)&d_input_offset, sizeof(int) * (array_size + 1));
         cudaMalloc((void **)&d_transition_list, sizeof(Transition) * tg->transition_count);
@@ -285,10 +287,10 @@ void run_TKO(class TransitionGraph *tg,
         cudaMalloc((void **)&d_final_st_vec, sizeof(ST_BLOCK) * vec_len * array_size);
         cudaMalloc((void **)&d_lim_vec, sizeof(ST_BLOCK)*vec_len * SYMBOL_COUNT * TOP_K);
         cudaMalloc((void **)&d_top_k_offset_per_symbol, sizeof(int) * SYMBOL_COUNT * TOP_K);
-        cudaEventRecord(memalloc_end, 0);
+        if(profiler_mode) cudaEventRecord(memalloc_end, 0);
         
         // Copy input from host memory into device memory
-        cudaEventRecord(memcpy_h2d_start, 0);
+        if(profiler_mode) cudaEventRecord(memcpy_h2d_start, 0);
         cudaMemcpy(d_input, h_input, total_input_bytes, cudaMemcpyHostToDevice);
         cudaMemcpy(d_input_offset, h_input_offset, sizeof(int) * (array_size + 1), cudaMemcpyHostToDevice);
         cudaMemcpy(d_transition_list, tg->transition_list, sizeof(Transition) * tg->transition_count, cudaMemcpyHostToDevice);
@@ -301,13 +303,13 @@ void run_TKO(class TransitionGraph *tg,
                         cudaMemcpy(&d_lim_vec[i*TOP_K*vec_len+j*vec_len], tg->lim_vec[i][j].vector, sizeof(ST_BLOCK) * vec_len, cudaMemcpyHostToDevice);
                 }
         }
-        cudaEventRecord(memcpy_h2d_end, 0);
+        if(profiler_mode) cudaEventRecord(memcpy_h2d_end, 0);
 
         // Calculate the size of shared memory (for 3 state vectors and transition offset)
         int shem = 3 * vec_len * sizeof(ST_BLOCK); // + sizeof(int) * (SYMBOL_COUNT + 1);
 
         // Launch kernel
-        cudaEventRecord(kernel_start, 0);
+        if(profiler_mode) cudaEventRecord(kernel_start, 0);
         cudaDeviceSetCacheConfig(cudaFuncCachePreferShared);
         cudaDeviceSetSharedMemConfig(cudaSharedMemBankSizeFourByte);
         TKO_kernel<<<array_size, threads_per_block, shem>>>(d_input,
@@ -319,12 +321,12 @@ void run_TKO(class TransitionGraph *tg,
                                                             d_top_k_offset_per_symbol,
                                                             d_lim_vec,
                                                             vec_len);
-        cudaEventRecord(kernel_end, 0);
-        cudaEventSynchronize(kernel_end);
+        if(profiler_mode) cudaEventRecord(kernel_end, 0);
+        if(profiler_mode) cudaEventSynchronize(kernel_end);
         // Copy result from device memory into host memory
-        cudaEventRecord(memcpy_d2h_start, 0);
+        if(profiler_mode) cudaEventRecord(memcpy_d2h_start, 0);
         cudaMemcpy(h_final_st_vec, d_final_st_vec, sizeof(ST_BLOCK) * vec_len * array_size, cudaMemcpyDeviceToHost);
-        cudaEventRecord(memcpy_d2h_end, 0);  
+        if(profiler_mode) cudaEventRecord(memcpy_d2h_end, 0);  
 
         // Get final active states and accept rules for each string
         vector<ST_T> final_states[array_size];
@@ -346,15 +348,10 @@ void run_TKO(class TransitionGraph *tg,
                 // Remove repeated accept rules for string i
                 sort(accept_rules[i].begin(), accept_rules[i].end());
                 accept_rules[i].erase(unique(accept_rules[i].begin(), accept_rules[i].end() ), accept_rules[i].end()); 
-                
-                //for (int j = 0; j < accept_rules[i].size(); j++) {
-                //        cout << accept_rules[i][j] << " ";
-                //}
-                //cout << endl;
         } 
 
         // Free device memory
-        cudaEventRecord(memfree_start, 0);
+        if(profiler_mode) cudaEventRecord(memfree_start, 0);
         cudaFree(d_input);
         cudaFree(d_input_offset);
         cudaFree(d_transition_list);
@@ -363,13 +360,13 @@ void run_TKO(class TransitionGraph *tg,
         cudaFree(d_final_st_vec);
         cudaFree(d_lim_vec);
         cudaFree(d_top_k_offset_per_symbol);
-        cudaEventRecord(memfree_end, 0);
+        if(profiler_mode) cudaEventRecord(memfree_end, 0);
 
         // Free host memory 
         free(h_final_st_vec);
         free(h_input);
 
-        gettimeofday(&end_time, NULL);
+        if(profiler_mode) gettimeofday(&end_time, NULL);
 
         if (show_match_result) show_results(array_size, final_states, accept_rules);
 
@@ -388,14 +385,16 @@ void run_TKO(class TransitionGraph *tg,
                 memfree_end);
 
         // Destroy events
-        cudaEventDestroy(memalloc_start);
-        cudaEventDestroy(memalloc_end);
-        cudaEventDestroy(memcpy_h2d_start);
-        cudaEventDestroy(memcpy_h2d_end);
-        cudaEventDestroy(kernel_start);
-        cudaEventDestroy(kernel_end);
-        cudaEventDestroy(memcpy_d2h_start);
-        cudaEventDestroy(memcpy_d2h_end);
-        cudaEventDestroy(memfree_start);
-        cudaEventDestroy(memfree_end);
+        if(profiler_mode){
+                cudaEventDestroy(memalloc_start);
+                cudaEventDestroy(memalloc_end);
+                cudaEventDestroy(memcpy_h2d_start);
+                cudaEventDestroy(memcpy_h2d_end);
+                cudaEventDestroy(kernel_start);
+                cudaEventDestroy(kernel_end);
+                cudaEventDestroy(memcpy_d2h_start);
+                cudaEventDestroy(memcpy_d2h_end);
+                cudaEventDestroy(memfree_start);
+                cudaEventDestroy(memfree_end);
+        }
 }
