@@ -19,14 +19,14 @@ using namespace std;
 
 void run_iNFA(class TransitionGraph *tg, unsigned char **h_input_array,
               int *input_bytes_array, int array_size, int threads_per_block,
-              bool show_match_result);
+              bool show_match_result, bool profiler_mode);
 
 void run_TKO(class TransitionGraph *tg, unsigned char **h_input_array,
              int *input_bytes_array, int array_size, int threads_per_block,
-             bool show_match_result);
+             bool show_match_result, bool profiler_mode);
 
 void run_AS(class TransitionGraph *tg, unsigned char **h_input_array,
             int *input_bytes_array, int array_size, int threads_per_block,
-            bool show_match_result);
+            bool show_match_result, bool profiler_mode);
 
 #endif
