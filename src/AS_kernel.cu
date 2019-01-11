@@ -304,53 +304,22 @@ free(h_input);
 
 gettimeofday(&end_time, NULL);
 
-if (show_match_result) {
-       for (int i = 0; i < array_size; i++) {
-               cout << "String " << i + 1 << endl;
-               
-               cout << "Final States : ";
-               for (int j = 0; j < final_states[i].size(); j++) {
-                       cout << final_states[i][j] << " ";
-               }
-               cout << endl;
+if (show_match_result) show_result(array_size, final_states, accept_rules);
 
-               cout << "Accept Rules : ";
-               for (int j = 0; j < accept_rules[i].size(); j++) {
-                       cout << accept_rules[i][j] << " ";
-               }                        
-               cout << endl;
-       }
-       cout << endl;
-}
-
-float time = (end_time.tv_sec - start_time.tv_sec) * 1000.0 + (end_time.tv_usec - start_time.tv_usec) / 1000.0;
-float cuda_time = 0;
-
-cout << "Total time: " << time << " ms ";
-cout << "(Per string time: " << time / array_size << " ms)" << endl;
-
-cudaEventElapsedTime(&time, memalloc_start, memalloc_end);
-cout << "Device memory allocation time: " << time << " ms" << endl;
-cuda_time += time;
-
-cudaEventElapsedTime(&time, memcpy_h2d_start, memcpy_h2d_end);
-cout << "Memory copy host to device time: " << time << " ms" << endl;
-cuda_time += time;
-
-cudaEventElapsedTime(&time, kernel_start, kernel_end);
-cout << "Kernel execution time: " << time << " ms ";
-cout << "(Per string kernel execution time: " << time / array_size << " ms)" << endl;
-cuda_time += time;
-
-cudaEventElapsedTime(&time, memcpy_d2h_start, memcpy_d2h_end);
-cout << "Memory copy device to host time: " << time << " ms" << endl;
-cuda_time += time;
-
-cudaEventElapsedTime(&time, memfree_start, memfree_end);
-cout << "Device memory free time: " << time << " ms" << endl;
-cuda_time += time;
-
-cout << "CUDA related time: " << cuda_time << " ms" << endl;
+Profiler(timeval start_time, 
+        timeval end_time, 
+        array_size, 
+        memalloc_start, 
+        memalloc_end,
+        memcpy_h2d_start,
+        memcpy_h2d_end,
+        kernel_start,
+        kernel_end,
+        memcpy_d2h_start,
+        memcpy_d2h_end,
+        memfree_start,
+        memfree_end
+);
 
 // Destroy events
 cudaEventDestroy(memalloc_start);
