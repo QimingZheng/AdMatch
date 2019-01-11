@@ -1,3 +1,8 @@
+#include <iostream>
+#include <stdlib.h>
+#include <string>
+#include "string.h"
+
 #include "include/ITA_regex.h"
 #include "src/transition_graph.h"
 #include "src/host_functions.h"
