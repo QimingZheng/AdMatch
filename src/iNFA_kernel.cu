@@ -188,6 +188,7 @@ void run_iNFA(class TransitionGraph *tg,
     ST_BLOCK *d_init_st_vec, *d_persis_st_vec, *d_final_st_vec;     // state vectors
 
     // Create events
+    if(profiler_mode){
     cudaEventCreate(&memalloc_start);
     cudaEventCreate(&memalloc_end);
     cudaEventCreate(&memcpy_h2d_start);
@@ -200,7 +201,7 @@ void run_iNFA(class TransitionGraph *tg,
     cudaEventCreate(&memfree_end);
 
     gettimeofday(&start_time, NULL);
-
+    }
     for (int i = 0; i < array_size; i++) {
             h_input_offset[i] = total_input_bytes;
             total_input_bytes += input_bytes_array[i];
@@ -226,7 +227,7 @@ void run_iNFA(class TransitionGraph *tg,
     }
     
     // Allocate device memory
-    cudaEventRecord(memalloc_start, 0);
+    if(profiler_mode) cudaEventRecord(memalloc_start, 0);
     cudaMalloc((void **)&d_input, total_input_bytes);
     cudaMalloc((void **)&d_input_offset, sizeof(int) * (array_size + 1));
     cudaMalloc((void **)&d_transition_list, sizeof(Transition) * tg->transition_count);
@@ -234,23 +235,23 @@ void run_iNFA(class TransitionGraph *tg,
     cudaMalloc((void **)&d_init_st_vec, sizeof(ST_BLOCK) * vec_len);
     cudaMalloc((void **)&d_persis_st_vec, sizeof(ST_BLOCK) * vec_len); 
     cudaMalloc((void **)&d_final_st_vec, sizeof(ST_BLOCK) * vec_len * array_size); 
-    cudaEventRecord(memalloc_end, 0);
+    if(profiler_mode) cudaEventRecord(memalloc_end, 0);
     
     // Copy input from host memory into device memory
-    cudaEventRecord(memcpy_h2d_start, 0);        
+    if(profiler_mode) cudaEventRecord(memcpy_h2d_start, 0);        
     cudaMemcpy(d_input, h_input, total_input_bytes, cudaMemcpyHostToDevice);
     cudaMemcpy(d_input_offset, h_input_offset, sizeof(int) * (array_size + 1), cudaMemcpyHostToDevice);
     cudaMemcpy(d_transition_list, tg->transition_list, sizeof(Transition) * tg->transition_count, cudaMemcpyHostToDevice);
     cudaMemcpy(d_transition_offset, tg->offset_per_symbol, sizeof(int) * (SYMBOL_COUNT + 1), cudaMemcpyHostToDevice);
     cudaMemcpy(d_init_st_vec, tg->init_states_vector.vector, sizeof(ST_BLOCK) * vec_len, cudaMemcpyHostToDevice);
     cudaMemcpy(d_persis_st_vec, tg->persis_states_vector.vector, sizeof(ST_BLOCK) * vec_len, cudaMemcpyHostToDevice);
-    cudaEventRecord(memcpy_h2d_end, 0);
+    if(profiler_mode) cudaEventRecord(memcpy_h2d_end, 0);
 
     // Calculate the size of shared memory (for 3 state vectors and transition offset)
     int shem = 3 * vec_len * sizeof(ST_BLOCK) + sizeof(int) * (SYMBOL_COUNT + 1);
 
     // Launch kernel
-    cudaEventRecord(kernel_start, 0);
+    if(profiler_mode) cudaEventRecord(kernel_start, 0);
     nfa_kernel<<<array_size, threads_per_block, shem>>>(d_input,
                                                         d_input_offset,
                                                         d_transition_list,
@@ -259,13 +260,13 @@ void run_iNFA(class TransitionGraph *tg,
                                                         d_persis_st_vec,
                                                         d_final_st_vec,
                                                         vec_len);
-    cudaEventRecord(kernel_end, 0);
-    cudaEventSynchronize(kernel_end);        
+    if(profiler_mode) cudaEventRecord(kernel_end, 0);
+    if(profiler_mode) cudaEventSynchronize(kernel_end);        
 
     // Copy result from device memory into host memory
-    cudaEventRecord(memcpy_d2h_start, 0);  
+    if(profiler_mode) cudaEventRecord(memcpy_d2h_start, 0);  
     cudaMemcpy(h_final_st_vec, d_final_st_vec, sizeof(ST_BLOCK) * vec_len * array_size, cudaMemcpyDeviceToHost);
-    cudaEventRecord(memcpy_d2h_end, 0);  
+    if(profiler_mode) cudaEventRecord(memcpy_d2h_end, 0);  
 
     // Get final active states and accept rules for each string
     vector<ST_T> final_states[array_size];
@@ -295,7 +296,7 @@ void run_iNFA(class TransitionGraph *tg,
     } 
 
     // Free device memory
-    cudaEventRecord(memfree_start, 0);
+    if(profiler_mode) cudaEventRecord(memfree_start, 0);
     cudaFree(d_input);
     cudaFree(d_input_offset);
     cudaFree(d_transition_list);
@@ -303,7 +304,7 @@ void run_iNFA(class TransitionGraph *tg,
     cudaFree(d_init_st_vec);
     cudaFree(d_persis_st_vec); 
     cudaFree(d_final_st_vec);
-    cudaEventRecord(memfree_end, 0);
+    if(profiler_mode) cudaEventRecord(memfree_end, 0);
 
     // Free host memory 
     free(h_final_st_vec);
@@ -328,14 +329,16 @@ void run_iNFA(class TransitionGraph *tg,
             memfree_end);
 
     // Destroy events
-    cudaEventDestroy(memalloc_start);
-    cudaEventDestroy(memalloc_end);
-    cudaEventDestroy(memcpy_h2d_start);
-    cudaEventDestroy(memcpy_h2d_end);
-    cudaEventDestroy(kernel_start);
-    cudaEventDestroy(kernel_end);
-    cudaEventDestroy(memcpy_d2h_start);
-    cudaEventDestroy(memcpy_d2h_end);
-    cudaEventDestroy(memfree_start);
-    cudaEventDestroy(memfree_end);
+    if(profiler_mode){
+        cudaEventDestroy(memalloc_start);
+        cudaEventDestroy(memalloc_end);
+        cudaEventDestroy(memcpy_h2d_start);
+        cudaEventDestroy(memcpy_h2d_end);
+        cudaEventDestroy(kernel_start);
+        cudaEventDestroy(kernel_end);
+        cudaEventDestroy(memcpy_d2h_start);
+        cudaEventDestroy(memcpy_d2h_end);
+        cudaEventDestroy(memfree_start);
+        cudaEventDestroy(memfree_end);
+    }
 }
