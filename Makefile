@@ -34,8 +34,8 @@ title:
 	mkdir -p $(DIR_LIB) $(DIR_BIN)
 
 tool: $(TARGET)
-	$(CC) -I$(DIR_INCLUDE) -L$(DIR_LIB) -arch=compute_60 -code=sm_60 -std=c++11 -Xcompiler -fopenmp -o $(DIR_BIN)/sequence tools/example.cpp -lita
-	$(CC) -I$(DIR_INCLUDE) -L$(DIR_LIB) -arch=compute_60 -code=sm_60 -std=c++11 -Xcompiler -fopenmp -o $(DIR_BIN)/batch tools/main.cpp -lita
+	$(CC) -I$(DIR_INCLUDE) -L$(DIR_LIB) -arch=compute_60 -code=sm_60 -std=c++11 -Xcompiler -fopenmp -o $(DIR_BIN)/sequence tools/sequence.cpp -lita
+	$(CC) -I$(DIR_INCLUDE) -L$(DIR_LIB) -arch=compute_60 -code=sm_60 -std=c++11 -Xcompiler -fopenmp -o $(DIR_BIN)/batch tools/batch.cpp -lita
 
 clean:
 	rm -f src/*.o $(TARGET) $(DIR_BIN)/sequence $(DIR_BIN)/batch
