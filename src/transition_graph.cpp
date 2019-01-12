@@ -58,6 +58,8 @@ TransitionGraph::~TransitionGraph() {
             delete[] lim_jump_with_offset[i];
             delete[] lim_vec[i];
         }
+        delete[] lim_jump_with_offset;
+        delete[] lim_vec;
     }
 }
 
