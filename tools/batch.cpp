@@ -19,7 +19,7 @@ void usage(char *program)
 int main(int argc, char **argv)
 {
         bool show_match_result = false, profiler_mode = false;
-        ITA_FLAGS flag;
+        ITA_FLAGS flag=0;
 
         if (argc < 4 || argc > 8)
         {
