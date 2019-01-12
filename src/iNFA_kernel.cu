@@ -164,7 +164,7 @@ void run_iNFA(class TransitionGraph *tg,
     int threads_per_block, 
     bool show_match_result,
     bool profiler_mode,
-    vector<int> *accepted_rules)
+    vector<int> *accept_rules)
 {
     struct timeval start_time, end_time;
     cudaEvent_t memalloc_start, memalloc_end;       // start and end events of device memory allocation
