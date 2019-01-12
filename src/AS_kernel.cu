@@ -149,7 +149,7 @@ BYPASS_HEAD:
 // array_size           :  array size (# of strings to match)
 // threads_per_block    :  # of threads per block for kernel function 
 // show_match_result    :  print regex matching result if this variable is true                     
-void run_AS(class TransitionGraph *tg, 
+vector<int>* run_AS(class TransitionGraph *tg, 
     unsigned char **h_input_array, 
     int *input_bytes_array, 
     int array_size,
@@ -336,4 +336,5 @@ void run_AS(class TransitionGraph *tg,
                 cudaEventDestroy(memfree_start);
                 cudaEventDestroy(memfree_end);
         }
+        return accept_rules;
 }

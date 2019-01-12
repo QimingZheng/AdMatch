@@ -16,7 +16,7 @@ using namespace std;
 // array_size           :  array size (# of strings to match)
 // threads_per_block    :  # of threads per block for kernel function
 // show_match_result    :  print regex matching result if this variable is true
-void run_nfa(class TransitionGraph *tg,
+vector<int>* run_nfa(class TransitionGraph *tg,
              unsigned char **h_input_array,
              int *input_bytes_array,
              int array_size,
@@ -24,7 +24,7 @@ void run_nfa(class TransitionGraph *tg,
              bool show_match_result,
              bool profiler_mode)
 {
-        if (tg->kernel == iNFA) run_iNFA(tg, h_input_array, input_bytes_array, array_size, threads_per_block, show_match_result, profiler_mode);
-        if (tg->kernel == TKO_NFA) run_TKO(tg, h_input_array, input_bytes_array, array_size, threads_per_block, show_match_result, profiler_mode);
-        if (tg->kernel == AS_NFA) run_AS(tg, h_input_array, input_bytes_array, array_size, threads_per_block, show_match_result, profiler_mode);
+        if (tg->kernel == iNFA) return run_iNFA(tg, h_input_array, input_bytes_array, array_size, threads_per_block, show_match_result, profiler_mode);
+        if (tg->kernel == TKO_NFA) return run_TKO(tg, h_input_array, input_bytes_array, array_size, threads_per_block, show_match_result, profiler_mode);
+        if (tg->kernel == AS_NFA) return run_AS(tg, h_input_array, input_bytes_array, array_size, threads_per_block, show_match_result, profiler_mode);
 }

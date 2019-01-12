@@ -157,7 +157,7 @@ BYPASS_HEAD:
         }        
 }
 
-void run_iNFA(class TransitionGraph *tg, 
+vector<int>* run_iNFA(class TransitionGraph *tg, 
     unsigned char **h_input_array, 
     int *input_bytes_array, 
     int array_size,
@@ -336,4 +336,5 @@ void run_iNFA(class TransitionGraph *tg,
         cudaEventDestroy(memfree_start);
         cudaEventDestroy(memfree_end);
     }
+    return accept_rules;
 }

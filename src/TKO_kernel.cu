@@ -206,7 +206,7 @@ BYPASS_HEAD:
 // array_size           :  array size (# of strings to match)
 // threads_per_block    :  # of threads per block for kernel function 
 // show_match_result    :  print regex matching result if this variable is true                     
-void run_TKO(class TransitionGraph *tg, 
+vector<int>* run_TKO(class TransitionGraph *tg, 
              unsigned char **h_input_array, 
              int *input_bytes_array, 
              int array_size,
@@ -342,13 +342,13 @@ void run_TKO(class TransitionGraph *tg,
                         itr = tg->accept_states_rules.find(final_states[i][j]);
                         if (itr != tg->accept_states_rules.end()) {
                                 accept_rules[i].insert(accept_rules[i].end(), itr->second.begin(), itr->second.end());
-                        } 
+                        }
                 }                
 
                 // Remove repeated accept rules for string i
                 sort(accept_rules[i].begin(), accept_rules[i].end());
                 accept_rules[i].erase(unique(accept_rules[i].begin(), accept_rules[i].end() ), accept_rules[i].end()); 
-        } 
+        }
 
         // Free device memory
         if(profiler_mode) cudaEventRecord(memfree_start, 0);
@@ -397,4 +397,5 @@ void run_TKO(class TransitionGraph *tg,
                 cudaEventDestroy(memfree_start);
                 cudaEventDestroy(memfree_end);
         }
+        return accept_rules;
 }

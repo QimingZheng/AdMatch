@@ -7,8 +7,9 @@ __device__ bool is_word_char(unsigned char c)
 }
 
 void show_results(int array_size, vector<ST_T> *final_states, vector<int> *accept_rules){
+    cout<<"==================\n";
     for (int i = 0; i < array_size; i++) {
-        cout << "String [" << i + 1 <<"]\n";
+        cout << "String [" << i + 1 <<"] :\n";
         
         cout << "Final States : ";
         for (int j = 0; j < final_states[i].size(); j++) {
@@ -22,7 +23,7 @@ void show_results(int array_size, vector<ST_T> *final_states, vector<int> *accep
         }                        
         cout << endl;
     }
-    cout << endl;
+    cout<<"==================\n";
 }
 
 void Profiler(struct timeval start_time, 
