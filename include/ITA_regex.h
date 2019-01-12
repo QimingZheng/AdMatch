@@ -15,6 +15,6 @@ typedef unsigned short int ITA_FLAGS;
 
 void Scan(ITA_FLAGS flag, char *nfa, char *text, vector<int> *accepted_rules);
 
-void BatchedScan(ITA_FLAGS flag, char *nfa, unsigned char *text, int *text_len, int str_count, vector<int> *accepted_rules);
+void BatchedScan(ITA_FLAGS flag, char *nfa, char **text, int *text_len, int str_count, vector<int> *accepted_rules);
 
 #endif

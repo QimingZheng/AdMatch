@@ -33,7 +33,7 @@ ${CUDA_OBJ}: %.o : %.cu
 title:
 	mkdir -p $(DIR_LIB) $(DIR_BIN)
 
-tool:
+tool: $(TARGET)
 	$(CC) -I$(DIR_INCLUDE) -L$(DIR_LIB) -arch=compute_60 -code=sm_60 -std=c++11 -Xcompiler -fopenmp -o $(DIR_BIN)/sequence tools/example.cpp -lita
 	$(CC) -I$(DIR_INCLUDE) -L$(DIR_LIB) -arch=compute_60 -code=sm_60 -std=c++11 -Xcompiler -fopenmp -o $(DIR_BIN)/batch tools/main.cpp -lita
 

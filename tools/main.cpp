@@ -41,7 +41,7 @@ int main(int argc, char **argv)
 
         for (int i = 0; i < string_count; i++) {
                 h_input_array[i] = argv[2];
-                input_bytes_array[i] = str_len;
+                input_bytes_array[i] = string_count;
         }
 
         vector<int> accepted_rules[string_count];
