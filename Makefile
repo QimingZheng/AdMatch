@@ -16,7 +16,7 @@ CUDA_INCLUDE = -I/usr/local/cuda-9.1/include -L/home/qizhe/SoftWare/boost_1_68_0
 CCFLAGS += $(CUDA_INCLUDE) -arch=compute_60 -code=sm_60 -std=c++11 -Xcompiler -fopenmp --compiler-options "-fPIC"
 DYN_LIB = -lboost_regex
 
-.PHONY: all clean title
+.PHONY: all clean title tool
 
 all: title $(TARGET)
 
@@ -31,6 +31,9 @@ ${CUDA_OBJ}: %.o : %.cu
 
 title:
 	mkdir -p $(DIR_LIB)
+
+tool:
+	$(CC) -I./include -L./lib -arch=compute_60 -code=sm_60 -std=c++11 -Xcompiler -fopenmp -o tool tools/example.cpp -lita
 
 clean:
 	rm -f src/*.o $(TARGET) 

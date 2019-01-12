@@ -33,9 +33,7 @@ void Scan(ITA_FLAGS flag, char *nfa, char *text, vector<int> *accepted_rules){
     input_bytes_array[0]=strlen(text);
 
     run_nfa(&tg, h_input_array, input_bytes_array, 1, 1024, flag&SHOW_RESULTS, flag&PROFILER_MODE, accepted_rules);
-    for (int i =0; i<accepted_rules[0].size(); i++)
-        cout<<accepted_rules[0][i]<<" - ";
-    cout<<endl;
+
 }
 
 void BatchedScan(ITA_FLAGS flag, char *nfa, unsigned char *text, int *text_len, int str_count, vector<int> *accepted_rules){
