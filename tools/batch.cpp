@@ -49,14 +49,20 @@ int main(int argc, char **argv)
 
         flag |= (profiler_mode ? PROFILER_MODE : 0) | (show_match_result ? SHOW_RESULTS : 0);
 
-        if (argc == 7)
+        if (argc >= 7)
         {
-                if (!strcmp(argv[6], "iNFA"))
+                if (argc != 8)
+                        exit(-1);
+                if (!strcmp(argv[7], "iNFA"))
                         flag |= INFA_KERNEL;
-                if (!strcmp(argv[6], "TKO"))
+                if (!strcmp(argv[7], "TKO"))
                         flag |= TKO_KERNEL;
-                if (!strcmp(argv[6], "AS"))
+                if (!strcmp(argv[7], "AS"))
                         flag |= AS_KERNEL;
+        }
+        else
+        {
+                flag |= INFA_KERNEL;
         }
 
         int string_count = atoi(argv[3]);
