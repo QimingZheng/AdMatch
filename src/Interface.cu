@@ -32,9 +32,9 @@ void Scan(ITA_FLAGS flag, char *nfa, char *text, vector<int> *accepted_rules){
     h_input_array[0]=(unsigned char*)text;
     input_bytes_array[0]=strlen(text);
 
-    accepted_rules = run_nfa(&tg, h_input_array, input_bytes_array, 1, 1024, 1, flag&PROFILER_MODE);
+    run_nfa(&tg, h_input_array, input_bytes_array, 1, 1024, 1, flag&PROFILER_MODE, accepted_rules);
     for (int i =0; i<accepted_rules[0].size(); i++)
-    cout<<accepted_rules[0][i]<<" - ";
+        cout<<accepted_rules[0][i]<<" - ";
     cout<<endl;
 }
 

@@ -11,12 +11,13 @@
 // array_size           :  array size (# of strings to match)
 // threads_per_block    :  # of threads per block for kernel function 
 // show_match_result    :  print regex matching result if this variable is true                     
-vector<int>* run_nfa(class TransitionGraph *tg, 
+void run_nfa(class TransitionGraph *tg, 
              unsigned char **h_input_array, 
              int *input_bytes_array, 
              int array_size,
              int threads_per_block, 
              bool show_match_result,
-             bool profiler_mode);
+             bool profiler_mode,
+             vector<int> *accepted_rules);
              
 #endif

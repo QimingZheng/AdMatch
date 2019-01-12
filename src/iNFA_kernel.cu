@@ -157,13 +157,14 @@ BYPASS_HEAD:
         }        
 }
 
-vector<int>* run_iNFA(class TransitionGraph *tg, 
+void run_iNFA(class TransitionGraph *tg, 
     unsigned char **h_input_array, 
     int *input_bytes_array, 
     int array_size,
     int threads_per_block, 
     bool show_match_result,
-    bool profiler_mode)
+    bool profiler_mode,
+    vector<int> *accepted_rules)
 {
     struct timeval start_time, end_time;
     cudaEvent_t memalloc_start, memalloc_end;       // start and end events of device memory allocation
@@ -270,7 +271,7 @@ vector<int>* run_iNFA(class TransitionGraph *tg,
 
     // Get final active states and accept rules for each string
     vector<ST_T> final_states[array_size];
-    vector<int> accept_rules[array_size];
+    //vector<int> accept_rules[array_size];
     unordered_map<ST_T, vector<int> >::iterator itr;
 
     for (int i = 0; i < array_size; i++) {
@@ -336,5 +337,4 @@ vector<int>* run_iNFA(class TransitionGraph *tg,
         cudaEventDestroy(memfree_start);
         cudaEventDestroy(memfree_end);
     }
-    return accept_rules;
 }
