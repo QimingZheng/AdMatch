@@ -309,20 +309,21 @@ void run_AS(class TransitionGraph *tg,
         if(profiler_mode) gettimeofday(&end_time, NULL);
 
         if (show_match_result) show_results(array_size, final_states, accept_rules);
-
-        Profiler(start_time, 
-                end_time, 
-                array_size, 
-                memalloc_start, 
-                memalloc_end,
-                memcpy_h2d_start,
-                memcpy_h2d_end,
-                kernel_start,
-                kernel_end,
-                memcpy_d2h_start,
-                memcpy_d2h_end,
-                memfree_start,
-                memfree_end);
+        if(profiler_mode){
+                Profiler(start_time, 
+                        end_time, 
+                        array_size, 
+                        memalloc_start, 
+                        memalloc_end,
+                        memcpy_h2d_start,
+                        memcpy_h2d_end,
+                        kernel_start,
+                        kernel_end,
+                        memcpy_d2h_start,
+                        memcpy_d2h_end,
+                        memfree_start,
+                        memfree_end);
+        }
 
         // Destroy events
         if(profiler_mode){
