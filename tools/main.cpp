@@ -24,19 +24,23 @@ int main(int argc, char **argv)
                 usage(argv[0]);
                 return EXIT_FAILURE;
         }
-        if (argc > 4)
-        {
-                if (strcmp(argv[4], "-s") || strcmp(argv[4], "-p"))
+
+        if(argc==5){
+                if (strcmp(argv[4], "-s") && strcmp(argv[4], "-p"))
                         return EXIT_FAILURE;
-                if (strcmp(argv[5], "-s") || strcmp(argv[5], "-p"))
+                if (!strcmp(argv[4], "-s"))
+                        show_match_result = 1;
+                if (!strcmp(argv[4], "-p"))
+                        profiler_mode = 1;
+        }
+
+        if (argc == 6)
+        {
+                if (strcmp(argv[5], "-s") && strcmp(argv[5], "-p"))
                         return EXIT_FAILURE;
                 if (!strcmp(argv[5], "-s"))
                         show_match_result = 1;
                 if (!strcmp(argv[5], "-p"))
-                        profiler_mode = 1;
-                if (!strcmp(argv[4], "-s"))
-                        show_match_result = 1;
-                if (!strcmp(argv[4], "-p"))
                         profiler_mode = 1;
         }
 
