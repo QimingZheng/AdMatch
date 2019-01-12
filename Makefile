@@ -34,6 +34,7 @@ title:
 
 tool:
 	$(CC) -I./include -L./lib -arch=compute_60 -code=sm_60 -std=c++11 -Xcompiler -fopenmp -o tool tools/example.cpp -lita
+	$(CC) -I./include -L./lib -arch=compute_60 -code=sm_60 -std=c++11 -Xcompiler -fopenmp -o tool tools/main.cpp -lita
 
 clean:
 	rm -f src/*.o $(TARGET) 
