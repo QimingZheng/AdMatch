@@ -25,7 +25,7 @@ int main(int argc, char **argv)
                 return EXIT_FAILURE;
         }
 
-        if(argc==5){
+        if(argc>=5){
                 if (strcmp(argv[4], "-s") && strcmp(argv[4], "-p"))
                         return EXIT_FAILURE;
                 if (!strcmp(argv[4], "-s"))
