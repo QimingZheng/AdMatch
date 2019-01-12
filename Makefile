@@ -3,6 +3,7 @@ DIR_INCLUDE = ./include
 DIR_TOOLS = ./tools
 DIR_LIB = ./lib
 DIR_OBJ = ./src
+DIR_BIN = ./bin
 
 CPP_SRC = $(wildcard ${DIR_SRC}/*.cpp)
 CUDA_SRC = $(wildcard ${DIR_SRC}/*.cu)
@@ -18,7 +19,7 @@ DYN_LIB = -lboost_regex
 
 .PHONY: all clean title tool
 
-all: title $(TARGET)
+all: title $(TARGET) tool
 
 $(TARGET) : ${CPP_OBJ} ${CUDA_OBJ}
 	$(CC) $(CCFLAGS) -shared -o $(TARGET) ${CPP_OBJ} ${CUDA_OBJ} $(DYN_LIB)
@@ -30,11 +31,11 @@ ${CUDA_OBJ}: %.o : %.cu
 	$(CC) $(CCFLAGS) -dc -c -o $@ $<
 
 title:
-	mkdir -p $(DIR_LIB)
+	mkdir -p $(DIR_LIB) $(DIR_BIN)
 
 tool:
-	$(CC) -I./include -L./lib -arch=compute_60 -code=sm_60 -std=c++11 -Xcompiler -fopenmp -o tool tools/example.cpp -lita
-	$(CC) -I./include -L./lib -arch=compute_60 -code=sm_60 -std=c++11 -Xcompiler -fopenmp -o tool tools/main.cpp -lita
+	$(CC) -I$(DIR_INCLUDE) -L$(DIR_LIB) -arch=compute_60 -code=sm_60 -std=c++11 -Xcompiler -fopenmp -o $(DIR_BIN)/sequence tools/example.cpp -lita
+	$(CC) -I$(DIR_INCLUDE) -L$(DIR_LIB) -arch=compute_60 -code=sm_60 -std=c++11 -Xcompiler -fopenmp -o $(DIR_BIN)/batch tools/main.cpp -lita
 
 clean:
-	rm -f src/*.o $(TARGET) 
+	rm -f src/*.o $(TARGET) $(DIR_BIN)/sequence $(DIR_BIN)/batch
