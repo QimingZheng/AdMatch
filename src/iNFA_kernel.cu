@@ -211,7 +211,7 @@ vector<int>* run_iNFA(class TransitionGraph *tg,
     h_input = (unsigned char*)malloc(total_input_bytes);
     if (!h_input) {
             cerr << "Error: allocate host memory to store total input string" << endl;
-            return;
+            exit(-1);
     }
 
     // Copy each string into h_input to construct a big string
@@ -223,7 +223,7 @@ vector<int>* run_iNFA(class TransitionGraph *tg,
     h_final_st_vec = (ST_BLOCK*)malloc(sizeof(ST_BLOCK) * vec_len * array_size);
     if (!h_final_st_vec) {
             cerr << "Error: allocate host memory to store final state vectors" << endl;
-            return;
+            exit(-1);
     }
     
     // Allocate device memory
