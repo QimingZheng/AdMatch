@@ -2,6 +2,9 @@
 #define ITA_KERNEL
 
 #include<vector>
+
+using namespace std;
+
 typedef unsigned short int ITA_FLAGS;
 
 #define INFA_KERNEL 1

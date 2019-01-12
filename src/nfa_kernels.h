@@ -17,15 +17,15 @@ using namespace std;
 #define thread_count blockDim.x
 
 
-void run_iNFA(class TransitionGraph *tg, unsigned char **h_input_array,
+vector<int>* run_iNFA(class TransitionGraph *tg, unsigned char **h_input_array,
               int *input_bytes_array, int array_size, int threads_per_block,
               bool show_match_result, bool profiler_mode);
 
-void run_TKO(class TransitionGraph *tg, unsigned char **h_input_array,
+vector<int>* run_TKO(class TransitionGraph *tg, unsigned char **h_input_array,
              int *input_bytes_array, int array_size, int threads_per_block,
              bool show_match_result, bool profiler_mode);
 
-void run_AS(class TransitionGraph *tg, unsigned char **h_input_array,
+vector<int>* run_AS(class TransitionGraph *tg, unsigned char **h_input_array,
             int *input_bytes_array, int array_size, int threads_per_block,
             bool show_match_result, bool profiler_mode);
 
