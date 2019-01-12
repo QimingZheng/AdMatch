@@ -10,7 +10,7 @@
 using namespace std;
 
 void FLAG_VERIFICATION(ITA_FLAGS flag){
-    assert((flag&TKO_KERNEL)+(flag&AS_KERNEL)+(flag&INFA_KERNEL) == 1);
+    assert( ((flag&TKO_KERNEL)+(flag&AS_KERNEL)+(flag&INFA_KERNEL)) == 1);
 }
 
 void Scan(ITA_FLAGS flag, char *nfa, char *text, vector<int> *accepted_rules){
