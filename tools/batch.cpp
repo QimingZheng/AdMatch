@@ -79,13 +79,14 @@ int main(int argc, char **argv)
         for (int i = 0; i < string_count; i++)
         {
                 h_input_array[i] = argv[2];
-                input_bytes_array[i] = string_count;
+                input_bytes_array[i] = strlen(argv[2]);
         }
 
         vector<int> accepted_rules[string_count];
 
         BatchedScan(flag,
-                    argv[1], h_input_array,
+                    argv[1],
+                    h_input_array,
                     input_bytes_array,
                     string_count,
                     accepted_rules);
