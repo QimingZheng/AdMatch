@@ -46,7 +46,7 @@ int main(int argc, char **argv)
                 return EXIT_SUCCESS;
         }
 
-        if(vm.count("s")) show_results = 1;
+        if(vm.count("s")) show_match_result = 1;
         if(vm.count("p")) profiler_mode = 1;
 
         flag |= (profiler_mode ? PROFILER_MODE : 0) | (show_match_result ? SHOW_RESULTS : 0);
