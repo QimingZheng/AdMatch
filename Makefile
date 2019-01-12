@@ -35,7 +35,7 @@ title:
 
 tool: $(TARGET)
 	$(CC) -I$(DIR_INCLUDE) -L$(DIR_LIB) -arch=compute_60 -code=sm_60 -std=c++11 -Xcompiler -fopenmp -o $(DIR_BIN)/sequence tools/sequence.cpp -lita
-	$(CC) -I$(DIR_INCLUDE) -L$(DIR_LIB) -arch=compute_60 -code=sm_60 -std=c++11 -Xcompiler -fopenmp -o $(DIR_BIN)/batch tools/batch.cpp -lita
+	$(CC) -I$(DIR_INCLUDE) -L$(DIR_LIB) -arch=compute_60 -code=sm_60 -std=c++11 -Xcompiler -fopenmp -o $(DIR_BIN)/batch tools/batch.cpp -lita -lboost_program_options
 
 clean:
 	rm -f src/*.o $(TARGET) $(DIR_BIN)/sequence $(DIR_BIN)/batch

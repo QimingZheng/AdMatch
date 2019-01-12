@@ -23,9 +23,9 @@ int main(int argc, char **argv)
         ("nfa,f", bpo::value<string>(&nfa_file)->default_value(""), "nfa_file")
         ("input,i", bpo::value<string>(&input_string)->default_value(""), "input_string")
         ("num,n", bpo::value<int>(&string_count)->default_value(0), "string_count")
-        ("s", "show regex matching result")
-        ("p", "show profiling result")
-        ("k", bpo::value<string>(&kernel_type)->default_value("iNFA"), "kernel type [iNFA], [TKO], [AS], iNFA by default")
+        ("s,s", "show regex matching result")
+        ("p,p", "show profiling result")
+        ("k,k", bpo::value<string>(&kernel_type)->default_value("iNFA"), "kernel type [iNFA], [TKO], [AS], iNFA by default")
         ("help,h", "Helper");
 
 
