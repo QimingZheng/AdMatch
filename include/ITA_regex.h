@@ -5,6 +5,8 @@
 
 using namespace std;
 
+struct ita_scratch;
+
 typedef unsigned short int ITA_FLAGS;
 
 #define INFA_KERNEL 1
@@ -12,6 +14,10 @@ typedef unsigned short int ITA_FLAGS;
 #define TKO_KERNEL (1 << 2)
 #define PROFILER_MODE (1 << 3)
 #define SHOW_RESULTS (1 << 4)
+
+void allocScratch(struct ita_scratch &scratch);
+
+void freeScratch(struct ita_scratch &scratch);
 
 void Scan(ITA_FLAGS flag, char *nfa, char *text, vector<int> *accepted_rules);
 
