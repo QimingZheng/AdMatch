@@ -50,7 +50,7 @@ void allocScratch(struct ita_scratch &scratch){
         cudaMalloc((void **)&(scratch.d_init_st_vec), sizeof(ST_BLOCK) * vec_len);
         cudaMalloc((void **)&(scratch.d_persis_st_vec), sizeof(ST_BLOCK) * vec_len); 
 
-        cudaMemcpy(scratch.d_transition_list, scratch.tg->transition_list, sizeof(Transition) * tg->transition_count, cudaMemcpyHostToDevice);
+        cudaMemcpy(scratch.d_transition_list, scratch.tg->transition_list, sizeof(Transition) * scratch.tg->transition_count, cudaMemcpyHostToDevice);
         cudaMemcpy(scratch.d_transition_offset, scratch.tg->offset_per_symbol, sizeof(int) * (SYMBOL_COUNT + 1), cudaMemcpyHostToDevice);
         cudaMemcpy(scratch.d_init_st_vec, scratch.tg->init_states_vector.vector, sizeof(ST_BLOCK) * vec_len, cudaMemcpyHostToDevice);
         cudaMemcpy(scratch.d_persis_st_vec, scratch.tg->persis_states_vector.vector, sizeof(ST_BLOCK) * vec_len, cudaMemcpyHostToDevice);
@@ -61,7 +61,7 @@ void allocScratch(struct ita_scratch &scratch){
         cudaMalloc((void **)&(scratch.d_lim_vec), sizeof(ST_BLOCK)*vec_len * SYMBOL_COUNT * TOP_K);
         cudaMalloc((void **)&(scratch.d_top_k_offset_per_symbol), sizeof(int) * SYMBOL_COUNT * TOP_K);
 
-        cudaMemcpy(scratch.d_transition_list, scratch.tg->transition_list, sizeof(Transition) * tg->transition_count, cudaMemcpyHostToDevice);
+        cudaMemcpy(scratch.d_transition_list, scratch.tg->transition_list, sizeof(Transition) * scratch.tg->transition_count, cudaMemcpyHostToDevice);
         cudaMemcpy(scratch.d_init_st_vec, scratch.tg->init_states_vector.vector, sizeof(ST_BLOCK) * vec_len, cudaMemcpyHostToDevice);
         cudaMemcpy(scratch.d_top_k_offset_per_symbol, scratch.tg->top_k_offset_per_symbol, sizeof(int) * SYMBOL_COUNT * TOP_K, cudaMemcpyHostToDevice);
         for (int i =0;i<SYMBOL_COUNT;i++){
@@ -81,8 +81,8 @@ void allocScratch(struct ita_scratch &scratch){
         {
         for(int j=0;j<scratch.tg->state_count;j++)
         {
-                cudaMemcpy(&(scratch.d_transition_table[vec_len*(i*tg->state_count+j)]),
-                        scratch.tg->transition_table[i*tg->state_count+j].vector,
+                cudaMemcpy(&(scratch.d_transition_table[vec_len*(i*scratch.tg->state_count+j)]),
+                        scratch.tg->transition_table[i*scratch.tg->state_count+j].vector,
                         sizeof(ST_BLOCK) * vec_len, cudaMemcpyHostToDevice);
         }
         }
