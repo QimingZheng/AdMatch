@@ -105,7 +105,7 @@ void Scan(struct ita_scratch &scratch, char *text, vector<int> *accepted_rules){
     h_input_array[0]=(unsigned char*)text;
     input_bytes_array[0]=strlen(text);
 
-    run_nfa(scratch, h_input_array, input_bytes_array, 1, 1024, flag&SHOW_RESULTS, flag&PROFILER_MODE, accepted_rules);
+    run_nfa(scratch, h_input_array, input_bytes_array, 1, 1024, scratch.flag&SHOW_RESULTS, scratch.flag&PROFILER_MODE, accepted_rules);
 }
 
 void BatchedScan(struct ita_scratch &scratch, char **text, int *text_len, int str_count, vector<int> *accepted_rules){
@@ -115,6 +115,6 @@ void BatchedScan(struct ita_scratch &scratch, char **text, int *text_len, int st
         h_input_array[i] = (unsigned char *) text[i];
     }
 
-    run_nfa(scratch, h_input_array, text_len, str_count, 32, flag&SHOW_RESULTS, flag&PROFILER_MODE, accepted_rules);
+    run_nfa(scratch, h_input_array, text_len, str_count, 32, scratch.flag&SHOW_RESULTS, scratch.flag&PROFILER_MODE, accepted_rules);
 
 }

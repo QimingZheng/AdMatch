@@ -279,8 +279,8 @@ void run_AS(struct ita_scratch &scratch,
         // Get all accept rules for string i
         for (int j = 0; j < final_states[i].size(); j++) {
                 // Get accept rules triggered by this state
-                itr = tg->accept_states_rules.find(final_states[i][j]);
-                if (itr != tg->accept_states_rules.end()) {
+                itr = scratch.tg->accept_states_rules.find(final_states[i][j]);
+                if (itr != scratch.tg->accept_states_rules.end()) {
                         accept_rules[i].insert(accept_rules[i].end(), itr->second.begin(), itr->second.end());
                 } 
         }                
