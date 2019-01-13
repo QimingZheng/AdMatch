@@ -25,7 +25,7 @@ void run_nfa(struct ita_scratch &scratch,
              bool profiler_mode,
              vector<int> *accepted_rules)
 {
-        if (tg->kernel == iNFA) run_iNFA(scratch, h_input_array, input_bytes_array, array_size, threads_per_block, show_match_result, profiler_mode, accepted_rules);
-        if (tg->kernel == TKO_NFA) run_TKO(scratch, h_input_array, input_bytes_array, array_size, threads_per_block, show_match_result, profiler_mode, accepted_rules);
-        if (tg->kernel == AS_NFA) run_AS(scratch, h_input_array, input_bytes_array, array_size, threads_per_block, show_match_result, profiler_mode, accepted_rules);
+        if (scratch.tg->kernel == iNFA) run_iNFA(scratch, h_input_array, input_bytes_array, array_size, threads_per_block, show_match_result, profiler_mode, accepted_rules);
+        if (scratch.tg->kernel == TKO_NFA) run_TKO(scratch, h_input_array, input_bytes_array, array_size, threads_per_block, show_match_result, profiler_mode, accepted_rules);
+        if (scratch.tg->kernel == AS_NFA) run_AS(scratch, h_input_array, input_bytes_array, array_size, threads_per_block, show_match_result, profiler_mode, accepted_rules);
 }
