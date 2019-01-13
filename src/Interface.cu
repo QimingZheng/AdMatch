@@ -17,31 +17,6 @@ void FLAG_VERIFICATION(ITA_FLAGS flag){
     assert(a+b+c==1);
 }
 
-struct ita_scratch{
-    ita_scratch(ITA_FLAGS flag, char *nfa){
-        FLAG_VERIFICATION(flag);
-        Kernel_Type kernel;
-        if (flag&INFA_KERNEL) kernel=iNFA;
-        if (flag&AS_KERNEL) kernel=AS_NFA;
-        if (flag&TKO_KERNEL) kernel=TKO_NFA;
-    
-        tg = new TransitionGraph(kernel);
-    
-        if (!tg->load_nfa_file(nfa)) {
-            cerr << "Error: load NFA file " << nfa << endl;
-            exit(-1);
-        }
-    }
-    TransitionGraph *tg;
-    
-    Transition *d_transition_list;                                  // list of transition (source, destination) tuples
-    int *d_transition_offset;
-    int *d_top_k_offset_per_symbol;
-    ST_BLOCK *d_init_st_vec, *d_persis_st_vec, *d_lim_vec;     // state vectors
-    ST_BLOCK *d_transition_table;
-
-};
-
 void allocScratch(struct ita_scratch &scratch){
     int vec_len = scratch.tg->init_states_vector.block_count;
     if(scratch.tg->kernel==iNFA){
