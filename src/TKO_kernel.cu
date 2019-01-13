@@ -233,9 +233,6 @@ void run_TKO(struct ita_scratch &scratch,
         // Variables in device memory
         unsigned char *d_input;                                         // total input string
         int *d_input_offset;                                            // offset of each input string
-        //Transition *d_transition_list;                                  // list of transition (source, destination) tuples
-        //int *d_top_k_offset_per_symbol; 
-        //ST_BLOCK *d_init_st_vec, *d_lim_vec;     // state vectors
         ST_BLOCK *d_final_st_vec;
 
         // Create events
@@ -282,26 +279,14 @@ void run_TKO(struct ita_scratch &scratch,
         if(profiler_mode) cudaEventRecord(memalloc_start, 0);
         cudaMalloc((void **)&d_input, total_input_bytes);
         cudaMalloc((void **)&d_input_offset, sizeof(int) * (array_size + 1));
-        //cudaMalloc((void **)&d_transition_list, sizeof(Transition) * tg->transition_count);
-        //cudaMalloc((void **)&d_init_st_vec, sizeof(ST_BLOCK) * vec_len);
         cudaMalloc((void **)&d_final_st_vec, sizeof(ST_BLOCK) * vec_len * array_size);
-        //cudaMalloc((void **)&d_lim_vec, sizeof(ST_BLOCK)*vec_len * SYMBOL_COUNT * TOP_K);
-        //cudaMalloc((void **)&d_top_k_offset_per_symbol, sizeof(int) * SYMBOL_COUNT * TOP_K);
         if(profiler_mode) cudaEventRecord(memalloc_end, 0);
         
         // Copy input from host memory into device memory
         if(profiler_mode) cudaEventRecord(memcpy_h2d_start, 0);
         cudaMemcpy(d_input, h_input, total_input_bytes, cudaMemcpyHostToDevice);
         cudaMemcpy(d_input_offset, h_input_offset, sizeof(int) * (array_size + 1), cudaMemcpyHostToDevice);
-        //cudaMemcpy(d_transition_list, tg->transition_list, sizeof(Transition) * tg->transition_count, cudaMemcpyHostToDevice);
         if(cudaSuccess!=cudaMemcpyToSymbol(c_transition_offset, scratch.tg->offset_per_symbol, sizeof(int) * (SYMBOL_COUNT + 1))) {cout<<"Error!\n"; exit(-1);}
-        //cudaMemcpy(d_init_st_vec, tg->init_states_vector.vector, sizeof(ST_BLOCK) * vec_len, cudaMemcpyHostToDevice);
-        //cudaMemcpy(d_top_k_offset_per_symbol, tg->top_k_offset_per_symbol, sizeof(int) * SYMBOL_COUNT * TOP_K, cudaMemcpyHostToDevice);
-        //for (int i =0;i<SYMBOL_COUNT;i++){
-        //        for(int j = 0; j<TOP_K; j++){
-        //                cudaMemcpy(&d_lim_vec[i*TOP_K*vec_len+j*vec_len], tg->lim_vec[i][j].vector, sizeof(ST_BLOCK) * vec_len, cudaMemcpyHostToDevice);
-        //        }
-        //}
         if(profiler_mode) cudaEventRecord(memcpy_h2d_end, 0);
 
         // Calculate the size of shared memory (for 3 state vectors and transition offset)
@@ -352,11 +337,7 @@ void run_TKO(struct ita_scratch &scratch,
         if(profiler_mode) cudaEventRecord(memfree_start, 0);
         cudaFree(d_input);
         cudaFree(d_input_offset);
-        //cudaFree(d_transition_list);
-        //cudaFree(d_init_st_vec);
         cudaFree(d_final_st_vec);
-        //cudaFree(d_lim_vec);
-        //cudaFree(d_top_k_offset_per_symbol);
         if(profiler_mode) cudaEventRecord(memfree_end, 0);
 
         // Free host memory 

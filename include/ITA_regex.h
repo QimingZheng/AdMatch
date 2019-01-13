@@ -23,7 +23,6 @@ struct ita_scratch{
     int *d_top_k_offset_per_symbol;
     ST_BLOCK *d_init_st_vec, *d_persis_st_vec, *d_lim_vec;     // state vectors
     ST_BLOCK *d_transition_table;
-
 };
 
 void allocScratch(struct ita_scratch &scratch);

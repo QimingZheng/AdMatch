@@ -98,7 +98,6 @@ void freeScratch(struct ita_scratch &scratch){
     }
 }
 
-
 void Scan(struct ita_scratch &scratch, char *text, vector<int> *accepted_rules){
     unsigned char *h_input_array[1];
     int input_bytes_array[1];
@@ -116,5 +115,4 @@ void BatchedScan(struct ita_scratch &scratch, char **text, int *text_len, int st
     }
 
     run_nfa(scratch, h_input_array, text_len, str_count, 32, scratch.flag&SHOW_RESULTS, scratch.flag&PROFILER_MODE, accepted_rules);
-
 }
