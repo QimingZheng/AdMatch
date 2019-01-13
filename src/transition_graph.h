@@ -1,18 +1,18 @@
 #ifndef TRANSITION_GRAPH_H
 #define TRANSITION_GRAPH_H
 
+#include <assert.h>
+#include <map>
 #include <set>
 #include <unordered_map>
 #include <vector>
-#include <map>
-#include <assert.h>
 
 #include "src/common.h"
 #include "src/state_vector.h"
 
 using namespace std;
 
-enum Kernel_Type {iNFA, TKO_NFA, AS_NFA};
+enum Kernel_Type { iNFA, TKO_NFA, AS_NFA };
 
 // Transition source and destination tuple
 class Transition {
@@ -80,13 +80,12 @@ class TransitionGraph {
     int* top_k_offset_per_symbol;         //[SYMBOL_COUNT * TOP_K];
     vector<ST_T>** lim_jump_with_offset;  //[SYMBOL_COUNT][TOP_K];
     map<int, set<Transition> > lim_tran_per_symbol_per_offset[SYMBOL_COUNT];
-    StateVector **lim_vec; //[SYMBOL_COUNT][TOP_K];
+    StateVector** lim_vec;  //[SYMBOL_COUNT][TOP_K];
     int total_transition_count;
 
     // AS-NFA Variable
-    StateVector *transition_table;
+    StateVector* transition_table;
     int wb_transition_count;
-
 };
 
 #endif
