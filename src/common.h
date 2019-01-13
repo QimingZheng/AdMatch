@@ -16,6 +16,6 @@
 
 #define bit_sizeof(a) (sizeof(a) * 8)  // # of bits for a variable / type
 
-#define TOP_K 64
+#define TOP_K 64 // top-k value for TKO-NFA
 
 #endif

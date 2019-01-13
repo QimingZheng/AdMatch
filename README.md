@@ -10,7 +10,7 @@ ITA-regex provide these three kernel mode for users to select.
 
 TODO
 
-## How TO Use ITA
+## How To Use ITA
 
 Interfaces we exposed are listed as follows:
 

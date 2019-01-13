@@ -16,16 +16,19 @@ using namespace std;
 #define thread_ID threadIdx.x
 #define thread_count blockDim.x
 
+// run_iNFA will call iNFA kernel
 void run_iNFA(struct ita_scratch &scratch, unsigned char **h_input_array,
               int *input_bytes_array, int array_size, int threads_per_block,
               bool show_match_result, bool profiler_mode,
               vector<int> *accepted_rules);
 
+// run_TKO will call TKO kernel
 void run_TKO(struct ita_scratch &scratch, unsigned char **h_input_array,
              int *input_bytes_array, int array_size, int threads_per_block,
              bool show_match_result, bool profiler_mode,
              vector<int> *accepted_rules);
 
+// run_AS will call AS kernel
 void run_AS(struct ita_scratch &scratch, unsigned char **h_input_array,
             int *input_bytes_array, int array_size, int threads_per_block,
             bool show_match_result, bool profiler_mode,
