@@ -1,9 +1,10 @@
+BUILD = .
 DIR_SRC = ./src
 DIR_INCLUDE = ./include
 DIR_TOOLS = ./tools
-DIR_LIB = ./lib
+DIR_LIB = ${BUILD}/lib
 DIR_OBJ = ./src
-DIR_BIN = ./bin
+DIR_BIN = ${BUILD}/bin
 
 CPP_SRC = $(wildcard ${DIR_SRC}/*.cpp)
 CUDA_SRC = $(wildcard ${DIR_SRC}/*.cu)
