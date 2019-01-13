@@ -6,6 +6,12 @@ The acronym ITA is made of the initial letters of **i**NFA, **T**KO-iNFA and **A
 *iNFA*, *TKO-iNFA* and *AS-NFA* are three type of gpu-kernel algorithms for regular expression matching task.
 ITA-regex provide these three kernel mode for users to select.
 
+## ITA Performance
+
+TODO
+
+## How TO Use ITA
+
 Interfaces we exposed are listed as follows:
 
 ```c++
