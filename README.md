@@ -40,11 +40,9 @@ For examples of using these ITA-regex, please turn to tools/sequence.cpp and too
 
 ## Installation Procedures
 
-Simply specify a **BUILD** directory to install, *./* by default.
-
-```
-make
-```
+1. Specify a **BUILD** directory to install, *./* by default.
+2. You need to modify the gpu-arch flag in the Makefile according to the computability of your device.
+3. make
 
 After installation, you will find the ita library under **BUILD**/lib, and a handy command line tool *bin/batch* under **BUILD**/bin.
 
