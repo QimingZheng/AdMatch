@@ -1,23 +1,46 @@
-# ITA-regex tool
+# ITA-regex
 
-## ITA-regex
+## What's ITA-regex
 
-ITA means iNFA, TKO-iNFA and AS-NFA, we provide these three type of kernels for users to select.
-Two mode is provided:
+The acronym ITA is made of the initial letters of **i**NFA, **T**KO-iNFA and **A**S-NFA.
+*iNFA*, *TKO-iNFA* and *AS-NFA* are three type of gpu-kernel algorithms for regular expression matching task.
+ITA-regex provide these three kernel mode for users to select.
+
+Interfaces we exposed are listed as follows:
+
+```c++
+struct ita_scratch;
+
+void allocScratch(struct ita_scratch &scratch);
+
+void freeScratch(struct ita_scratch &scratch);
+
+void Scan(struct ita_scratch &scratch, char *text, vector<int> *accepted_rules);
+
+void BatchedScan(struct ita_scratch &scratch, char **text, int *text_len,
+                 int str_count, vector<int> *accepted_rules);
 ```
-Single string Scanning
 
-Batched Strings Scanning
-```
-You can use ITA by including ITA_regex.h
+For interpretations for these interfaces, please turn to include/ITA_regex.h, you only need to include ITA_regex.h,
+provide regex file, and set appropriate flags, then feed input strings to ITA, ITA will do the rest for you.
 
-For examples of using these ITA-regex, you can turn to tools/sequence.cpp and tools/batch.cpp.
+For examples of using these ITA-regex, please turn to tools/sequence.cpp and tools/batch.cpp.
 
-## Build Prerequest
+## Installation Prerequest
 
-- CUDA
-- nvcc
+- CUDA Library
+- nvcc Compiler
 - Boost Library
+
+## Installation Procedures
+
+Simply specify a **BUILD** directory to install, *./* by default.
+
+```
+make
+```
+
+After installation, you will find the ita library under **BUILD**/lib, and a handy command line tool *bin/batch* under **BUILD**/bin.
 
 ## TODO
 
@@ -26,4 +49,3 @@ For examples of using these ITA-regex, you can turn to tools/sequence.cpp and to
 3. Automatically adjust:
     - threads_per_block
     - kernel_selection
-4. Flow-Event based handler
