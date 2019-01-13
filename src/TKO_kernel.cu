@@ -309,7 +309,7 @@ void run_TKO(struct ita_scratch &scratch,
         // Copy result from device memory into host memory
         if(profiler_mode) cudaEventRecord(memcpy_d2h_start, 0);
         cudaMemcpy(h_final_st_vec, d_final_st_vec, sizeof(ST_BLOCK) * vec_len * array_size, cudaMemcpyDeviceToHost);
-        if(profiler_mode) cudaEventRecord(memcpy_d2h_end, 0);  
+        if(profiler_mode) cudaEventRecord(memcpy_d2h_end, 0);
 
         // Get final active states and accept rules for each string
         vector<ST_T> final_states[array_size];
@@ -326,8 +326,7 @@ void run_TKO(struct ita_scratch &scratch,
                         if (itr != scratch.tg->accept_states_rules.end()) {
                                 accept_rules[i].insert(accept_rules[i].end(), itr->second.begin(), itr->second.end());
                         }
-                }                
-
+                }
                 // Remove repeated accept rules for string i
                 sort(accept_rules[i].begin(), accept_rules[i].end());
                 accept_rules[i].erase(unique(accept_rules[i].begin(), accept_rules[i].end() ), accept_rules[i].end()); 

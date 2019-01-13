@@ -1,5 +1,5 @@
-#ifndef ITA_KERNEL
-#define ITA_KERNEL
+#ifndef ITA_REGEX_H
+#define ITA_REGEX_H
 
 #include <vector>
 #include "src/transition_graph.h"

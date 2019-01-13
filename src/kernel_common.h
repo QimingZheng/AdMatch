@@ -1,5 +1,5 @@
-#ifndef KERNEL_COMMON
-#define KERNEL_COMMON
+#ifndef KERNEL_COMMON_H
+#define KERNEL_COMMON_H
 
 #include <iostream>
 #include <vector>

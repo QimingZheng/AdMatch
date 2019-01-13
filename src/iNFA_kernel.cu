@@ -266,7 +266,6 @@ void run_iNFA(struct ita_scratch &scratch,
 
     for (int i = 0; i < array_size; i++) {
             get_active_states(h_final_st_vec + i * vec_len, vec_len, final_states[i]);
-
             // Get all accept rules for string i
             for (int j = 0; j < final_states[i].size(); j++) {
                     // Get accept rules triggered by this state
@@ -274,8 +273,7 @@ void run_iNFA(struct ita_scratch &scratch,
                     if (itr != scratch.tg->accept_states_rules.end()) {
                             accept_rules[i].insert(accept_rules[i].end(), itr->second.begin(), itr->second.end());
                     } 
-            }                
-
+            }
             // Remove repeated accept rules for string i
             sort(accept_rules[i].begin(), accept_rules[i].end());
             accept_rules[i].erase(unique(accept_rules[i].begin(), accept_rules[i].end() ), accept_rules[i].end()); 

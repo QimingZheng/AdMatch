@@ -1,5 +1,5 @@
-#ifndef NFA_KERNELS
-#define NFA_KERNELS
+#ifndef NFA_KERNELS_H
+#define NFA_KERNELS_H
 
 #include <iostream>
 #include <algorithm>

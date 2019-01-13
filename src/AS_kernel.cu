@@ -195,8 +195,8 @@ void run_AS(struct ita_scratch &scratch,
         }
 
         for (int i = 0; i < array_size; i++) {
-        h_input_offset[i] = total_input_bytes;
-        total_input_bytes += input_bytes_array[i];
+                h_input_offset[i] = total_input_bytes;
+                total_input_bytes += input_bytes_array[i];
         }
         h_input_offset[array_size] = total_input_bytes;
 
@@ -208,7 +208,7 @@ void run_AS(struct ita_scratch &scratch,
 
         // Copy each string into h_input to construct a big string
         for (int i = 0; i < array_size; i++) {
-        memcpy(h_input + h_input_offset[i], h_input_array[i], input_bytes_array[i]);
+                memcpy(h_input + h_input_offset[i], h_input_array[i], input_bytes_array[i]);
         }
 
         // Allocate host memory
@@ -259,22 +259,19 @@ void run_AS(struct ita_scratch &scratch,
         unordered_map<ST_T, vector<int> >::iterator itr;
 
         for (int i = 0; i < array_size; i++) {
-        get_active_states(h_final_st_vec + i * vec_len, vec_len, final_states[i]);
-
-        // Get all accept rules for string i
-        for (int j = 0; j < final_states[i].size(); j++) {
-                // Get accept rules triggered by this state
-                itr = scratch.tg->accept_states_rules.find(final_states[i][j]);
-                if (itr != scratch.tg->accept_states_rules.end()) {
-                        accept_rules[i].insert(accept_rules[i].end(), itr->second.begin(), itr->second.end());
-                } 
-        }                
-
-        // Remove repeated accept rules for string i
-        sort(accept_rules[i].begin(), accept_rules[i].end());
-        accept_rules[i].erase(unique(accept_rules[i].begin(), accept_rules[i].end() ), accept_rules[i].end()); 
-        
-        } 
+                get_active_states(h_final_st_vec + i * vec_len, vec_len, final_states[i]);
+                // Get all accept rules for string i
+                for (int j = 0; j < final_states[i].size(); j++) {
+                        // Get accept rules triggered by this state
+                        itr = scratch.tg->accept_states_rules.find(final_states[i][j]);
+                        if (itr != scratch.tg->accept_states_rules.end()) {
+                                accept_rules[i].insert(accept_rules[i].end(), itr->second.begin(), itr->second.end());
+                        }
+                }
+                // Remove repeated accept rules for string i
+                sort(accept_rules[i].begin(), accept_rules[i].end());
+                accept_rules[i].erase(unique(accept_rules[i].begin(), accept_rules[i].end() ), accept_rules[i].end());
+        }
 
         // Free device memory
         if(profiler_mode) cudaEventRecord(memfree_start, 0);
