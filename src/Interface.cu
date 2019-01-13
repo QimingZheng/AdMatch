@@ -27,7 +27,7 @@ struct ita_scratch{
     
         tg = new TransitionGraph(kernel);
     
-        if (!tg.load_nfa_file(nfa)) {
+        if (!tg->load_nfa_file(nfa)) {
             cerr << "Error: load NFA file " << nfa << endl;
             exit(-1);
         }
@@ -45,7 +45,7 @@ struct ita_scratch{
 void allocScratch(struct ita_scratch &scratch){
     int vec_len = scratch.tg->init_states_vector.block_count;
     if(scratch.tg->kernel==iNFA){
-        cudaMalloc((void **)&(scratch.d_transition_list), sizeof(Transition) * tg->transition_count);
+        cudaMalloc((void **)&(scratch.d_transition_list), sizeof(Transition) * scratch.tg->transition_count);
         cudaMalloc((void **)&(scratch.d_transition_offset), sizeof(int) * (SYMBOL_COUNT + 1));
         cudaMalloc((void **)&(scratch.d_init_st_vec), sizeof(ST_BLOCK) * vec_len);
         cudaMalloc((void **)&(scratch.d_persis_st_vec), sizeof(ST_BLOCK) * vec_len); 
@@ -56,7 +56,7 @@ void allocScratch(struct ita_scratch &scratch){
         cudaMemcpy(scratch.d_persis_st_vec, scratch.tg->persis_states_vector.vector, sizeof(ST_BLOCK) * vec_len, cudaMemcpyHostToDevice);
     }
     if(scratch.tg->kernel==TKO_NFA){
-        cudaMalloc((void **)&(scratch.d_transition_list), sizeof(Transition) * tg->transition_count);
+        cudaMalloc((void **)&(scratch.d_transition_list), sizeof(Transition) * scratch.tg->transition_count);
         cudaMalloc((void **)&(scratch.d_init_st_vec), sizeof(ST_BLOCK) * vec_len);
         cudaMalloc((void **)&(scratch.d_lim_vec), sizeof(ST_BLOCK)*vec_len * SYMBOL_COUNT * TOP_K);
         cudaMalloc((void **)&(scratch.d_top_k_offset_per_symbol), sizeof(int) * SYMBOL_COUNT * TOP_K);
@@ -79,7 +79,7 @@ void allocScratch(struct ita_scratch &scratch){
         cudaMemcpy(scratch.d_transition_list, scratch.tg->transition_list, sizeof(Transition) * scratch.tg->wb_transition_count, cudaMemcpyHostToDevice);
         for(int i=0;i<SYMBOL_COUNT;i++)
         {
-        for(int j=0;j<tg->state_count;j++)
+        for(int j=0;j<scratch.tg->state_count;j++)
         {
                 cudaMemcpy(&(scratch.d_transition_table[vec_len*(i*tg->state_count+j)]),
                         scratch.tg->transition_table[i*tg->state_count+j].vector,
