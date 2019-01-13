@@ -157,7 +157,7 @@ BYPASS_HEAD:
         }        
 }
 
-void run_iNFA(class TransitionGraph *tg, 
+void run_iNFA(struct ita_scratch &scratch,
     unsigned char **h_input_array, 
     int *input_bytes_array, 
     int array_size,
@@ -173,7 +173,7 @@ void run_iNFA(class TransitionGraph *tg,
     cudaEvent_t memcpy_d2h_start, memcpy_d2h_end;   // start and end events of memory copy from device to host
     cudaEvent_t memfree_start, memfree_end;         // start and end events of device memory free
 
-    int vec_len = tg->init_states_vector.block_count;       // length (# of blocks) of state vector
+    int vec_len = scratch.tg->init_states_vector.block_count;       // length (# of blocks) of state vector
     int total_input_bytes = 0;                              // sum of string length
 
     // Variables in host memory
@@ -184,9 +184,10 @@ void run_iNFA(class TransitionGraph *tg,
     // Variables in device memory
     unsigned char *d_input;                                         // total input string
     int *d_input_offset;                                            // offset of each input string
-    Transition *d_transition_list;                                  // list of transition (source, destination) tuples
-    int *d_transition_offset;                                       // index of first transition trigger by each symbol    
-    ST_BLOCK *d_init_st_vec, *d_persis_st_vec, *d_final_st_vec;     // state vectors
+    //Transition *d_transition_list;                                  // list of transition (source, destination) tuples
+    //int *d_transition_offset;                                       // index of first transition trigger by each symbol    
+    //ST_BLOCK *d_init_st_vec, *d_persis_st_vec;     // state vectors
+    ST_BLOCK *d_final_st_vec;
 
     // Create events
     if(profiler_mode){
@@ -226,15 +227,15 @@ void run_iNFA(class TransitionGraph *tg,
             cerr << "Error: allocate host memory to store final state vectors" << endl;
             exit(-1);
     }
-    
+
     // Allocate device memory
     if(profiler_mode) cudaEventRecord(memalloc_start, 0);
     cudaMalloc((void **)&d_input, total_input_bytes);
     cudaMalloc((void **)&d_input_offset, sizeof(int) * (array_size + 1));
-    cudaMalloc((void **)&d_transition_list, sizeof(Transition) * tg->transition_count);
-    cudaMalloc((void **)&d_transition_offset, sizeof(int) * (SYMBOL_COUNT + 1));
-    cudaMalloc((void **)&d_init_st_vec, sizeof(ST_BLOCK) * vec_len);
-    cudaMalloc((void **)&d_persis_st_vec, sizeof(ST_BLOCK) * vec_len); 
+    //cudaMalloc((void **)&d_transition_list, sizeof(Transition) * tg->transition_count);
+    //cudaMalloc((void **)&d_transition_offset, sizeof(int) * (SYMBOL_COUNT + 1));
+    //cudaMalloc((void **)&d_init_st_vec, sizeof(ST_BLOCK) * vec_len);
+    //cudaMalloc((void **)&d_persis_st_vec, sizeof(ST_BLOCK) * vec_len); 
     cudaMalloc((void **)&d_final_st_vec, sizeof(ST_BLOCK) * vec_len * array_size); 
     if(profiler_mode) cudaEventRecord(memalloc_end, 0);
     
@@ -242,10 +243,10 @@ void run_iNFA(class TransitionGraph *tg,
     if(profiler_mode) cudaEventRecord(memcpy_h2d_start, 0);        
     cudaMemcpy(d_input, h_input, total_input_bytes, cudaMemcpyHostToDevice);
     cudaMemcpy(d_input_offset, h_input_offset, sizeof(int) * (array_size + 1), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_transition_list, tg->transition_list, sizeof(Transition) * tg->transition_count, cudaMemcpyHostToDevice);
-    cudaMemcpy(d_transition_offset, tg->offset_per_symbol, sizeof(int) * (SYMBOL_COUNT + 1), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_init_st_vec, tg->init_states_vector.vector, sizeof(ST_BLOCK) * vec_len, cudaMemcpyHostToDevice);
-    cudaMemcpy(d_persis_st_vec, tg->persis_states_vector.vector, sizeof(ST_BLOCK) * vec_len, cudaMemcpyHostToDevice);
+    //cudaMemcpy(d_transition_list, tg->transition_list, sizeof(Transition) * tg->transition_count, cudaMemcpyHostToDevice);
+    //cudaMemcpy(d_transition_offset, tg->offset_per_symbol, sizeof(int) * (SYMBOL_COUNT + 1), cudaMemcpyHostToDevice);
+    //cudaMemcpy(d_init_st_vec, tg->init_states_vector.vector, sizeof(ST_BLOCK) * vec_len, cudaMemcpyHostToDevice);
+    //cudaMemcpy(d_persis_st_vec, tg->persis_states_vector.vector, sizeof(ST_BLOCK) * vec_len, cudaMemcpyHostToDevice);
     if(profiler_mode) cudaEventRecord(memcpy_h2d_end, 0);
 
     // Calculate the size of shared memory (for 3 state vectors and transition offset)
@@ -255,10 +256,10 @@ void run_iNFA(class TransitionGraph *tg,
     if(profiler_mode) cudaEventRecord(kernel_start, 0);
     nfa_kernel<<<array_size, threads_per_block, shem>>>(d_input,
                                                         d_input_offset,
-                                                        d_transition_list,
-                                                        d_transition_offset,
-                                                        d_init_st_vec,
-                                                        d_persis_st_vec,
+                                                        scratch.d_transition_list,
+                                                        scratch.d_transition_offset,
+                                                        scratch.d_init_st_vec,
+                                                        scratch.d_persis_st_vec,
                                                         d_final_st_vec,
                                                         vec_len);
     if(profiler_mode) cudaEventRecord(kernel_end, 0);
@@ -280,8 +281,8 @@ void run_iNFA(class TransitionGraph *tg,
             // Get all accept rules for string i
             for (int j = 0; j < final_states[i].size(); j++) {
                     // Get accept rules triggered by this state
-                    itr = tg->accept_states_rules.find(final_states[i][j]);
-                    if (itr != tg->accept_states_rules.end()) {
+                    itr = scratch.tg->accept_states_rules.find(final_states[i][j]);
+                    if (itr != scratch.tg->accept_states_rules.end()) {
                             accept_rules[i].insert(accept_rules[i].end(), itr->second.begin(), itr->second.end());
                     } 
             }                
@@ -295,10 +296,10 @@ void run_iNFA(class TransitionGraph *tg,
     if(profiler_mode) cudaEventRecord(memfree_start, 0);
     cudaFree(d_input);
     cudaFree(d_input_offset);
-    cudaFree(d_transition_list);
-    cudaFree(d_transition_offset);
-    cudaFree(d_init_st_vec);
-    cudaFree(d_persis_st_vec); 
+    //cudaFree(d_transition_list);
+    //cudaFree(d_transition_offset);
+    //cudaFree(d_init_st_vec);
+    //cudaFree(d_persis_st_vec); 
     cudaFree(d_final_st_vec);
     if(profiler_mode) cudaEventRecord(memfree_end, 0);
 

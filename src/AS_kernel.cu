@@ -149,7 +149,7 @@ BYPASS_HEAD:
 // array_size           :  array size (# of strings to match)
 // threads_per_block    :  # of threads per block for kernel function 
 // show_match_result    :  print regex matching result if this variable is true                     
-void run_AS(class TransitionGraph *tg, 
+void run_AS(struct ita_scratch &scratch,
     unsigned char **h_input_array, 
     int *input_bytes_array, 
     int array_size,
@@ -165,7 +165,7 @@ void run_AS(class TransitionGraph *tg,
         cudaEvent_t memcpy_d2h_start, memcpy_d2h_end;   // start and end events of memory copy from device to host
         cudaEvent_t memfree_start, memfree_end;         // start and end events of device memory free
 
-        int vec_len = tg->init_states_vector.block_count;       // length (# of blocks) of state vector
+        int vec_len = scratch.tg->init_states_vector.block_count;       // length (# of blocks) of state vector
         int total_input_bytes = 0;                              // sum of string length
 
         // Variables in host memory
@@ -176,9 +176,10 @@ void run_AS(class TransitionGraph *tg,
         // Variables in device memory
         unsigned char *d_input;                                         // total input string
         int *d_input_offset;                                            // offset of each input string
-        ST_BLOCK *d_init_st_vec, *d_final_st_vec;     // state vectors
-        ST_BLOCK *d_transition_table;
-        Transition *d_transition_list;
+        //ST_BLOCK *d_init_st_vec;     // state vectors
+        ST_BLOCK *d_final_st_vec;
+        //ST_BLOCK *d_transition_table;
+        //Transition *d_transition_list;
 
         // Create events
         if(profiler_mode){
@@ -224,27 +225,25 @@ void run_AS(class TransitionGraph *tg,
         if(profiler_mode) cudaEventRecord(memalloc_start, 0);
         cudaMalloc((void **)&d_input, total_input_bytes);
         cudaMalloc((void **)&d_input_offset, sizeof(int) * (array_size + 1));
-        cudaMalloc((void **)&d_init_st_vec, sizeof(ST_BLOCK) * vec_len);
+        //cudaMalloc((void **)&d_init_st_vec, sizeof(ST_BLOCK) * vec_len);
         cudaMalloc((void **)&d_final_st_vec, sizeof(ST_BLOCK) * vec_len * array_size);
-        cudaMalloc((void **)&d_transition_table, sizeof(ST_BLOCK) * vec_len * tg->state_count * SYMBOL_COUNT);
-        cudaMalloc((void **)&d_transition_list, sizeof(Transition) * tg->wb_transition_count);
+        //cudaMalloc((void **)&d_transition_table, sizeof(ST_BLOCK) * vec_len * tg->state_count * SYMBOL_COUNT);
+        //cudaMalloc((void **)&d_transition_list, sizeof(Transition) * tg->wb_transition_count);
         if(profiler_mode) cudaEventRecord(memalloc_end, 0);
 
         // Copy input from host memory into device memory
         if(profiler_mode) cudaEventRecord(memcpy_h2d_start, 0);
         cudaMemcpy(d_input, h_input, total_input_bytes, cudaMemcpyHostToDevice);
         cudaMemcpy(d_input_offset, h_input_offset, sizeof(int) * (array_size + 1), cudaMemcpyHostToDevice);
-        cudaMemcpy(d_init_st_vec, tg->init_states_vector.vector, sizeof(ST_BLOCK) * vec_len, cudaMemcpyHostToDevice);
-        cudaMemcpy(d_transition_list, tg->transition_list, sizeof(Transition) * tg->wb_transition_count, cudaMemcpyHostToDevice);
-        for(int i=0;i<SYMBOL_COUNT;i++)
-        {
-        for(int j=0;j<tg->state_count;j++)
-        {
-                cudaMemcpy(&d_transition_table[vec_len*(i*tg->state_count+j)],
-                        tg->transition_table[i*tg->state_count+j].vector,
-                        sizeof(ST_BLOCK) * vec_len, cudaMemcpyHostToDevice);
-        }
-        }
+        //cudaMemcpy(d_init_st_vec, tg->init_states_vector.vector, sizeof(ST_BLOCK) * vec_len, cudaMemcpyHostToDevice);
+        //cudaMemcpy(d_transition_list, tg->transition_list, sizeof(Transition) * tg->wb_transition_count, cudaMemcpyHostToDevice);
+        //for(int i=0;i<SYMBOL_COUNT;i++){
+        //for(int j=0;j<tg->state_count;j++){
+        //        cudaMemcpy(&d_transition_table[vec_len*(i*tg->state_count+j)],
+        //                tg->transition_table[i*tg->state_count+j].vector,
+        //                sizeof(ST_BLOCK) * vec_len, cudaMemcpyHostToDevice);
+        //}
+        //}
         if(profiler_mode) cudaEventRecord(memcpy_h2d_end, 0);
 
         // Calculate the size of shared memory (for 3 state vectors and transition offset)
@@ -254,13 +253,13 @@ void run_AS(class TransitionGraph *tg,
         if(profiler_mode) cudaEventRecord(kernel_start, 0);
         AS_kernel<<<array_size, threads_per_block, shem>>>(d_input,
                                                         d_input_offset,
-                                                        d_transition_table,
-                                                        d_transition_list,
-                                                        d_init_st_vec,
+                                                        scratch.d_transition_table,
+                                                        scratch.d_transition_list,
+                                                        scratch.d_init_st_vec,
                                                         d_final_st_vec,
                                                         vec_len,
-                                                        tg->state_count,
-                                                        tg->wb_transition_count);
+                                                        scratch.tg->state_count,
+                                                        scratch.tg->wb_transition_count);
         if(profiler_mode) cudaEventRecord(kernel_end, 0);
         if(profiler_mode) cudaEventSynchronize(kernel_end);
 
@@ -296,13 +295,13 @@ void run_AS(class TransitionGraph *tg,
         if(profiler_mode) cudaEventRecord(memfree_start, 0);
         cudaFree(d_input);
         cudaFree(d_input_offset);
-        cudaFree(d_init_st_vec);
+        //cudaFree(d_init_st_vec);
         cudaFree(d_final_st_vec);
-        cudaFree(d_transition_table);
-        cudaFree(d_transition_list);
+        //cudaFree(d_transition_table);
+        //cudaFree(d_transition_list);
         if(profiler_mode) cudaEventRecord(memfree_end, 0);
 
-        // Free host memory 
+        // Free host memory
         free(h_final_st_vec);
         free(h_input);
 

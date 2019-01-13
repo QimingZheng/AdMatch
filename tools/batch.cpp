@@ -78,13 +78,14 @@ int main(int argc, char **argv)
         }
 
         vector<int> accepted_rules[string_count];
-
-        BatchedScan(flag,
-                    nfa,
+        ita_scratch scratch(flag, nfa);
+        allocScratch(scratch);
+        BatchedScan(scratch,
                     h_input_array,
                     input_bytes_array,
                     string_count,
                     accepted_rules);
+        freeScratch(scratch);
 
         return EXIT_SUCCESS;
 }
