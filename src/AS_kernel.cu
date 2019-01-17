@@ -82,6 +82,7 @@ BYPASS_HEAD:
         // For each transition triggered by the character
         for (int blk = 0; blk < vector_len; blk++) {
             int tmp = current_st_vec[blk];
+            /*
             if (tmp) {
                 for (int s = blk * bit_sizeof(ST_BLOCK);
                      s < min((int)((blk + 1) * bit_sizeof(ST_BLOCK)),
@@ -97,6 +98,18 @@ BYPASS_HEAD:
                         __syncthreads();
                     }
                 }
+            }*/
+            while (tmp) {
+                int pos = __ffs(tmp);
+                tmp = tmp ^ (1<<(pos-1));
+                pos = blk * bit_sizeof(ST_BLOCK) + pos-1;
+                for (int i = thread_ID; i < vector_len;
+                    i += thread_count) {
+                    future_st_vec[i] |=
+                       transition_table[c * state_count * vector_len +
+                                        pos * vector_len + i];
+               }
+               __syncthreads();
             }
         }
 
