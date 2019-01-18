@@ -57,8 +57,6 @@ After installation, you will find the ita library under **BUILD**/lib, and a han
 
 ## TODO
 
-1. Do more **Correctness Verification**
-2. Profile more http request
-3. Automatically adjust:
-    - threads_per_block
-    - kernel_selection
+Add new feature of automatic adjusting:
+  - threads_per_block
+  - kernel_selection
