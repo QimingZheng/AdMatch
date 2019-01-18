@@ -9,7 +9,7 @@ ITA-regex provide these three kernel mode for users to select.
 ## ITA Performance
 
 | Engine Type |  Processing Time Per Request (us) | Acceleration-Ratio |
-| -- | -- |
+| -- | -- | -- |
 | PCRE | 4416 | 1.0X |
 | PCRE-jit | 285 | 15.49X |
 | RE2 | 462 | 9.56X |
