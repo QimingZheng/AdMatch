@@ -8,7 +8,16 @@ ITA-regex provide these three kernel mode for users to select.
 
 ## ITA Performance
 
-TODO
+| Engine Type |  Processing Time Per Request (us) | Acceleration-Ratio |
+| -- | -- |
+| PCRE | 4416 | 1.0X |
+| PCRE-jit | 285 | 15.49X |
+| RE2 | 462 | 9.56X |
+| HyperScan | 127 | 34.77X |
+| iNFA | 7258 | 0.61X |
+| ITA | 62 | 71.23X |
+
+Based on **CRS rule set** & **Bing Search Request**.
 
 ## How To Use ITA
 
