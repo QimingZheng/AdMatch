@@ -1,5 +1,7 @@
 # ITA-regex
 
+Please Click Star! 求点星星！第一次这么认真开源东西.
+
 ## What's ITA-regex
 
 The acronym ITA is made of the initial letters of **i**NFA, **T**KO-iNFA and **A**S-NFA.
