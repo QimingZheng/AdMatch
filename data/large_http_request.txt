@@ -1,0 +1,172 @@
+GET / HTTP/1.1
+Host: www.baidu.com
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Cookie: BAIDUID=96E5878839FE883358472BC3AAA167B9:FG=1; BIDUPSID=96E5878839FE883358472BC3AAA167B9; PSTM=1499864719; pgv_pvi=4049024000; pgv_si=s2928067584; BDORZ=FAE1F8CFA4E8841CC28A015FEAEE495D
+
+GET /img/baidu_jgylogo3.gif HTTP/1.1
+Host: www.baidu.com
+Connection: keep-alive
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36
+Accept: image/webp,image/apng,image/*,*/*;q=0.8
+Referer: http://www.baidu.com/
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Cookie: BAIDUID=96E5878839FE883358472BC3AAA167B9:FG=1; BIDUPSID=96E5878839FE883358472BC3AAA167B9; PSTM=1499864719; pgv_pvi=4049024000; pgv_si=s2928067584; BDORZ=FAE1F8CFA4E8841CC28A015FEAEE495D; BDSVRTM=0; BD_HOME=0; H_PS_PSSID=1443_12897_21078
+
+GET /his?wd=&from=pc_web&rf=3&hisdata=%5B%7B%22time%22%3A1515564644%2C%22kw%22%3A%22escalate%22%7D%2C%7B%22time%22%3A1516795181%2C%22kw%22%3A%22dctcp%22%7D%2C%7B%22time%22%3A1516795962%2C%22kw%22%3A%22furthermore%22%7D%2C%7B%22time%22%3A1516796079%2C%22kw%22%3A%22%E4%B8%80%E5%AE%9A%E7%A8%8B%E5%BA%A6%E4%B8%8A%22%7D%2C%7B%22time%22%3A1516797412%2C%22kw%22%3A%22contradictory%22%7D%2C%7B%22time%22%3A1516797417%2C%22kw%22%3A%22contradict%22%7D%2C%7B%22time%22%3A1516805512%2C%22kw%22%3A%22recurrent%22%7D%2C%7B%22time%22%3A1516935887%2C%22kw%22%3A%22loan%22%7D%2C%7B%22time%22%3A1516948401%2C%22kw%22%3A%22squash%22%7D%5D&json=1&p=3&sid=1443_12897_21078&req=2&csor=0&cb=jQuery1102007545869402002792_1522050855552&_=1522050855553 HTTP/1.1
+Host: www.baidu.com
+Connection: keep-alive
+Accept: text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36
+Referer: http://www.baidu.com/
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Cookie: BAIDUID=96E5878839FE883358472BC3AAA167B9:FG=1; BIDUPSID=96E5878839FE883358472BC3AAA167B9; PSTM=1499864719; pgv_pvi=4049024000; pgv_si=s2928067584; BDORZ=FAE1F8CFA4E8841CC28A015FEAEE495D; BD_HOME=0; H_PS_PSSID=1443_12897_21078; BD_UPN=12314753
+
+GET /search/error.html HTTP/1.1
+Host: www.baidu.com
+Connection: keep-alive
+Accept: text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36
+Referer: http://www.baidu.com/
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Cookie: BAIDUID=96E5878839FE883358472BC3AAA167B9:FG=1; BIDUPSID=96E5878839FE883358472BC3AAA167B9; PSTM=1499864719; pgv_pvi=4049024000; pgv_si=s2928067584; BDORZ=FAE1F8CFA4E8841CC28A015FEAEE495D; BD_HOME=0; H_PS_PSSID=1443_12897_21078; BD_UPN=12314753
+
+GET / HTTP/1.1
+Accept: text/html, application/xhtml+xml, image/jxr, */*
+Accept-Language: en-US
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko
+Accept-Encoding: gzip, deflate
+Host: www.bing.com
+DNT: 1
+Connection: Keep-Alive
+Cookie: SRCHD=AF=IESR02; SRCHUSR=DOB=20170216; _SS=SID=10164CC215E36AA0396246E914BD6BC8&R=10&HV=1487820201&bIm=806868; _EDGE_S=F=1&SID=10164CC215E36AA0396246E914BD6BC8; _EDGE_V=1; MUID=1B2B8633634E6F0206098C1862106EF7; _UR=D=1; SRCHHPGUSR=CW=1738&CH=1018&DPR=1&UTC=0; _RwBf=s=70&o=16; ipv6=hit=1; WLS=TS=63623417000; SRCHUID=V=2&GUID=D75B31F7917245FA8CFA217FDAC4E4BA; MUIDB=1B2B8633634E6F0206098C1862106EF7
+
+GET / HTTP/1.1
+Host: www.ust.hk
+Connection: keep-alive
+Pragma: no-cache
+Cache-Control: no-cache
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Cookie: _ga=GA1.2.1524572007.1499939126; _gid=GA1.2.474413115.1522050652; _gat=1; wfvt_2398242606=5ab8ab5eafe4a; wordfence_verifiedHuman=f66aeae3235e93367d766e4da286711f
+
+GET /wp-content/plugins/fancybox-for-wordpress/fancybox/fancybox.css HTTP/1.1
+Host: www.ust.hk
+Connection: keep-alive
+Pragma: no-cache
+Cache-Control: no-cache
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36
+Accept: text/css,*/*;q=0.1
+Referer: http://www.ust.hk/
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Cookie: _ga=GA1.2.1524572007.1499939126; _gid=GA1.2.474413115.1522050652; _gat=1; wordfence_verifiedHuman=f66aeae3235e93367d766e4da286711f; wfvt_2398242606=5ab8ab69546b0
+
+GET /wp-content/themes/hkust/css/minimalist.css HTTP/1.1
+Host: www.ust.hk
+Connection: keep-alive
+Pragma: no-cache
+Cache-Control: no-cache
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36
+Accept: text/css,*/*;q=0.1
+Referer: http://www.ust.hk/
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Cookie: _ga=GA1.2.1524572007.1499939126; _gid=GA1.2.474413115.1522050652; _gat=1; wordfence_verifiedHuman=f66aeae3235e93367d766e4da286711f; wfvt_2398242606=5ab8ab69546b0
+
+GET /wp-content/plugins/codeflavors-floating-menu2/css/cfm_menu2.css HTTP/1.1
+Host: www.ust.hk
+Connection: keep-alive
+Pragma: no-cache
+Cache-Control: no-cache
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36
+Accept: text/css,*/*;q=0.1
+Referer: http://www.ust.hk/
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Cookie: _ga=GA1.2.1524572007.1499939126; _gid=GA1.2.474413115.1522050652; _gat=1; wordfence_verifiedHuman=f66aeae3235e93367d766e4da286711f; wfvt_2398242606=5ab8ab69546b0
+
+GET /wp-content/uploads/2018/03/CoverPage_IWD-1.jpg HTTP/1.1
+Host: www.ust.hk
+Connection: keep-alive
+Pragma: no-cache
+Cache-Control: no-cache
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36
+Accept: image/webp,image/apng,image/*,*/*;q=0.8
+Referer: http://www.ust.hk/
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Cookie: _ga=GA1.2.1524572007.1499939126; _gid=GA1.2.474413115.1522050652; _gat=1; wordfence_verifiedHuman=f66aeae3235e93367d766e4da286711f; wfvt_2398242606=5ab8ab69546b0
+
+GET /wp-content/uploads/2017/09/AGoodStoryToTell_banner1-2.jpg HTTP/1.1
+Host: www.ust.hk
+Connection: keep-alive
+Pragma: no-cache
+Cache-Control: no-cache
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36
+Accept: image/webp,image/apng,image/*,*/*;q=0.8
+Referer: http://www.ust.hk/
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Cookie: _ga=GA1.2.1524572007.1499939126; _gid=GA1.2.474413115.1522050652; _gat=1; wordfence_verifiedHuman=f66aeae3235e93367d766e4da286711f; wfvt_2398242606=5ab8ab69546b0
+
+GET /wp-content/uploads/2017/09/NEWBanner-1-500x350.jpg HTTP/1.1
+Host: www.ust.hk
+Connection: keep-alive
+Pragma: no-cache
+Cache-Control: no-cache
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36
+Accept: image/webp,image/apng,image/*,*/*;q=0.8
+Referer: http://www.ust.hk/
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Cookie: _ga=GA1.2.1524572007.1499939126; _gid=GA1.2.474413115.1522050652; _gat=1; wordfence_verifiedHuman=f66aeae3235e93367d766e4da286711f; wfvt_2398242606=5ab8ab69546b0
+
+GET /wp-content/themes/hkust/css/print.css HTTP/1.1
+Host: www.ust.hk
+Connection: keep-alive
+Pragma: no-cache
+Cache-Control: no-cache
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36
+Accept: text/css,*/*;q=0.1
+Referer: http://www.ust.hk/
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Cookie: _ga=GA1.2.1524572007.1499939126; _gid=GA1.2.474413115.1522050652; _gat=1; wordfence_verifiedHuman=f66aeae3235e93367d766e4da286711f; wfvt_2398242606=5ab8ab69546b0
+
+GET /wp-content/plugins/revslider/public/assets/js/extensions/revolution.extension.actions.min.js?version=5.4.1 HTTP/1.1
+Host: www.ust.hk
+Connection: keep-alive
+Pragma: no-cache
+Cache-Control: no-cache
+Accept: text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36
+Referer: http://www.ust.hk/
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Cookie: _ga=GA1.2.1524572007.1499939126; _gid=GA1.2.474413115.1522050652; _gat=1; wordfence_verifiedHuman=f66aeae3235e93367d766e4da286711f; wfvt_2398242606=5ab8ab69546b0
+
+GET /wp-content/uploads/2018/03/CoverPage_NoStraw-100x50.jpg HTTP/1.1
+Host: www.ust.hk
+Connection: keep-alive
+Pragma: no-cache
+Cache-Control: no-cache
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36
+Accept: image/webp,image/apng,image/*,*/*;q=0.8
+Referer: http://www.ust.hk/
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Cookie: _ga=GA1.2.1524572007.1499939126; _gid=GA1.2.474413115.1522050652; _gat=1; wordfence_verifiedHuman=f66aeae3235e93367d766e4da286711f; wfvt_2398242606=5ab8ab69546b0

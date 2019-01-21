@@ -1,0 +1,9 @@
+GET / HTTP/1.1
+Accept: text/html, application/xhtml+xml, image/jxr, */*
+Accept-Language: en-US
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko
+Accept-Encoding: gzip, deflate
+Host: www.bing.com
+DNT: 1
+Connection: Keep-Alive
+Cookie: SRCHD=AF=IESR02; SRCHUSR=DOB=20170216; _SS=SID=10164CC215E36AA0396246E914BD6BC8&R=10&HV=1487820201&bIm=806868; _EDGE_S=F=1&SID=10164CC215E36AA0396246E914BD6BC8; _EDGE_V=1; MUID=1B2B8633634E6F0206098C1862106EF7; _UR=D=1; SRCHHPGUSR=CW=1738&CH=1018&DPR=1&UTC=0; _RwBf=s=70&o=16; ipv6=hit=1; WLS=TS=63623417000; SRCHUID=V=2&GUID=D75B31F791
