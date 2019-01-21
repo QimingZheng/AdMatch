@@ -62,3 +62,4 @@ After installation, you will find the ita library under **BUILD**/lib, and a han
 Add new feature of automatic adjusting:
   - threads_per_block
   - kernel_selection
+UTs
