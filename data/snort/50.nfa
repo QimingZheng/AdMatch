@@ -1,0 +1,11 @@
+# NFA
+5
+0 : initial
+0 -> 1 : 38
+0 -> 2 : 35
+0 -> 3 : 43
+0 -> 4 : 33
+1 : accepting 1
+2 : accepting 1
+3 : accepting 1
+4 : accepting 1
