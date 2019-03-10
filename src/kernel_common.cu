@@ -6,13 +6,13 @@ __device__ bool is_word_char(unsigned char c) {
            (c >= '0' && c <= '9') || (c == '_');
 }
 
-__inline__ __device__ int warpReduceSum(int val) {
+__device__ int warpReduceSum(int val) {
   for (int offset = warpSize/2; offset > 0; offset /= 2) 
     val += __shfl_down(val, offset);
   return val;
 }
 
-__inline__ __device__ int blockReduceSum(int val) {
+__device__ int blockReduceSum(int val) {
   static __shared__ int shared[32]; // Shared mem for 32 partial sums
   int lane = threadIdx.x % warpSize;
   int wid = threadIdx.x / warpSize;
