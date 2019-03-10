@@ -14,6 +14,9 @@ typedef unsigned short int ITA_FLAGS;
 #define AS_KERNEL (1 << 1)
 #define TKO_KERNEL (1 << 2)
 
+// Matcher Selection (default not selected)
+#define AD_MATCHER (1<<5)
+
 // Profiler mode on/off
 #define PROFILER_MODE (1 << 3)
 
@@ -34,6 +37,12 @@ struct ita_scratch {
     int *d_top_k_offset_per_symbol;
     ST_BLOCK *d_init_st_vec, *d_persis_st_vec, *d_lim_vec;  // state vectors
     ST_BLOCK *d_transition_table;
+};
+
+struct ad_scratch{
+    ad_scratch(ITA_FLAGS flags, char *nfa);
+    ITA_FLAGS flag;
+    ita_scratch *infa_scratch, *tko_scratch, *as_scratch;
 };
 
 // alloc gpu-mem and record them in scratch

@@ -6,6 +6,33 @@ __device__ bool is_word_char(unsigned char c) {
            (c >= '0' && c <= '9') || (c == '_');
 }
 
+__inline__ __device__ int warpReduceSum(int val) {
+  for (int offset = warpSize/2; offset > 0; offset /= 2) 
+    val += __shfl_down(val, offset);
+  return val;
+}
+
+__inline__ __device__ int blockReduceSum(int val) {
+  static __shared__ int shared[32]; // Shared mem for 32 partial sums
+  int lane = threadIdx.x % warpSize;
+  int wid = threadIdx.x / warpSize;
+
+  val = warpReduceSum(val);     // Each warp performs partial reduction
+
+  if (lane==0) shared[wid]=val; // Write reduced value to shared memory
+
+  __syncthreads();              // Wait for all partial reductions
+
+  //read from shared memory only if that warp existed
+  val = (threadIdx.x < blockDim.x / warpSize) ? shared[lane] : 0;
+
+  if (wid==0) shared[0] = warpReduceSum(val); //Final reduce within first warp
+
+  __syncthreads();
+
+  return shared[0];
+}
+
 void show_results(int array_size, vector<ST_T> *final_states,
                   vector<int> *accept_rules) {
     for (int i = 0; i < array_size; i++) {
