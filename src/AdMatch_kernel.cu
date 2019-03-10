@@ -32,7 +32,7 @@ __global__ void admatch_kernel(unsigned char *input, int *input_offset,
     ST_T src_state, dst_state;
     ST_BLOCK src_bit, dst_bit;
     unsigned int src_block, dst_block;
-    int c, transition_start, transition_count,;
+    int c, transition_start, transition_count;
 
     // Copy initial and persistent states from global memory into shared memory
     for (int i = thread_ID; i < vector_len; i += thread_count) {

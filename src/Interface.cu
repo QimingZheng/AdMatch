@@ -140,7 +140,7 @@ void freeScratch(struct ita_scratch &scratch) {
     }
 }
 
-void ad_allocScratch(struct ad_scratch &scratch){
+void ad_freeScratch(struct ad_scratch &scratch){
     freeScratch(*(scratch.infa_scratch));
     freeScratch(*(scratch.tko_scratch));
     freeScratch(*(scratch.as_scratch));
