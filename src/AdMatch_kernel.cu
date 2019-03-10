@@ -26,7 +26,7 @@ __global__ void admatch_kernel(unsigned char *input, int *input_offset,
     ST_BLOCK *future_st_vec =
         s_data + vector_len;  // future active states in shared memory
     ST_BLOCK *workspace_vec = 
-        s_data + 2*vec_len;
+        s_data + 2*vector_len;
 
     Transition tuple = tko_transition_list[0];
     ST_T src_state, dst_state;
@@ -262,7 +262,7 @@ void run_AD(struct ad_scratch &scratch, unsigned char **h_input_array,
     cudaEvent_t memfree_start,
         memfree_end;  // start and end events of device memory free
 
-    int vec_len = scratch.as_scratch.tg->init_states_vector
+    int vec_len = scratch.as_scratch->tg->init_states_vector
                       .block_count;  // length (# of blocks) of state vector
     int total_input_bytes = 0;       // sum of string length
 
@@ -334,13 +334,13 @@ void run_AD(struct ad_scratch &scratch, unsigned char **h_input_array,
     cudaMemcpy(d_input_offset, h_input_offset, sizeof(int) * (array_size + 1),
                cudaMemcpyHostToDevice);
     if (cudaSuccess != cudaMemcpyToSymbol(c_transition_offset,
-            scratch.tko_scratch.tg->offset_per_symbol,
+            scratch.tko_scratch->tg->offset_per_symbol,
             sizeof(int) * (SYMBOL_COUNT + 1))) {
     cout << "Error!\n";
     exit(-1);
     }
     if (cudaSuccess != cudaMemcpyToSymbol(c_optimal_k_per_symbol,
-            scratch.tko_scratch.tg->optimal_k_per_symbol,
+            scratch.tko_scratch->tg->optimal_k_per_symbol,
             sizeof(int) * (SYMBOL_COUNT + 1))) {
     cout << "Error!\n";
     exit(-1);
@@ -357,16 +357,16 @@ void run_AD(struct ad_scratch &scratch, unsigned char **h_input_array,
     // cudaDeviceSetSharedMemConfig(cudaSharedMemBankSizeFourByte);
     admatch_kernel<<<array_size, threads_per_block, shem>>>(d_input,
         d_input_offset,
-        scratch.as_scratch.d_transition_table,
-        scratch.as_scratch.d_transition_list,
-        scratch.tko_scratch.d_transition_list,
-        scratch.tko_scratch.d_top_k_offset_per_symbol,
-        scratch.tko_scratch.d_lim_vec,
-        scratch.as_scratch.d_init_st_vec,
+        scratch.as_scratch->d_transition_table,
+        scratch.as_scratch->d_transition_list,
+        scratch.tko_scratch->d_transition_list,
+        scratch.tko_scratch->d_top_k_offset_per_symbol,
+        scratch.tko_scratch->d_lim_vec,
+        scratch.as_scratch->d_init_st_vec,
         d_final_st_vec,
         vec_len,
-        scratch.as_scratch.tg->state_count,
-        scratch.as_scratch.tg->wb_transition_count);
+        scratch.as_scratch->tg->state_count,
+        scratch.as_scratch->tg->wb_transition_count);
     if (profiler_mode) cudaEventRecord(kernel_end, 0);
     if (profiler_mode) cudaEventSynchronize(kernel_end);
 
@@ -387,8 +387,8 @@ void run_AD(struct ad_scratch &scratch, unsigned char **h_input_array,
         // Get all accept rules for string i
         for (int j = 0; j < final_states[i].size(); j++) {
             // Get accept rules triggered by this state
-            itr = scratch.as_scratch.tg->accept_states_rules.find(final_states[i][j]);
-            if (itr != scratch.as_scratch.tg->accept_states_rules.end()) {
+            itr = scratch.as_scratch->tg->accept_states_rules.find(final_states[i][j]);
+            if (itr != scratch.as_scratch->tg->accept_states_rules.end()) {
                 accept_rules[i].insert(accept_rules[i].end(),
                                        itr->second.begin(), itr->second.end());
             }

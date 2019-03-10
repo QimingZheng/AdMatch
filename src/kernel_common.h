@@ -10,6 +10,8 @@ using namespace std;
 // Return true of the input char is a word character [A-Za-z0-9_]
 __device__ bool is_word_char(unsigned char c);
 
+__inline__ __device__ int blockReduceSum(int val);
+
 // show matching results, including final active states, accepted rules
 // called when SHOW_RESULTS is on
 void show_results(int array_size, vector<ST_T> *final_states,
