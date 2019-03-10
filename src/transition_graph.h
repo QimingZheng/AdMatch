@@ -77,10 +77,11 @@ class TransitionGraph {
                            // persistent states)
 
     // TKO Variables
-    int* top_k_offset_per_symbol;         //[SYMBOL_COUNT * TOP_K];
-    vector<ST_T>** lim_jump_with_offset;  //[SYMBOL_COUNT][TOP_K];
+    int* optimal_k_per_symbol; // [SYMBOL_COUNT + 1]; optimal_k_per_symbol[k+1] - optimal_k_per_symbol[k] = optimal k for symbol[k]
+    int* top_k_offset_per_symbol;         //[optimal_k_per_symbol[SYMBOL_COUNT+1]];
+    vector<ST_T>* lim_jump_with_offset;  //[optimal_k_per_symbol[SYMBOL_COUNT+1]];
     map<int, set<Transition> > lim_tran_per_symbol_per_offset[SYMBOL_COUNT];
-    StateVector** lim_vec;  //[SYMBOL_COUNT][TOP_K];
+    StateVector* lim_vec;  //[optimal_k_per_symbol[SYMBOL_COUNT+1]];
     int total_transition_count;
 
     // AS-NFA Variable

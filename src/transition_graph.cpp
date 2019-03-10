@@ -37,6 +37,8 @@ TransitionGraph::TransitionGraph(Kernel_Type k_t) {
 
     if (kernel == TKO_NFA) {
         total_transition_count = 0;
+        optimal_k_per_symbol = new int[SYMBOL_COUNT+1];
+        /*
         top_k_offset_per_symbol = new int[SYMBOL_COUNT * TOP_K];
         lim_jump_with_offset = new vector<ST_T> *[SYMBOL_COUNT];
         lim_vec = new StateVector *[SYMBOL_COUNT];
@@ -47,6 +49,7 @@ TransitionGraph::TransitionGraph(Kernel_Type k_t) {
                 lim_jump_with_offset[i][j].clear();
             }
         }
+        */
     }
 }
 
@@ -54,11 +57,8 @@ TransitionGraph::~TransitionGraph() {
     free_host(transition_list);
     if (kernel == AS_NFA) free_host(transition_table);
     if (kernel == TKO_NFA) {
+        delete[] optimal_k_per_symbol;
         delete[] top_k_offset_per_symbol;
-        for (int i = 0; i < SYMBOL_COUNT; i++) {
-            delete[] lim_jump_with_offset[i];
-            delete[] lim_vec[i];
-        }
         delete[] lim_jump_with_offset;
         delete[] lim_vec;
     }
@@ -95,10 +95,12 @@ bool TransitionGraph::load_nfa_file(char *file_name) {
     accept_states_vector.alloc(state_count);
 
     if (kernel == TKO_NFA) {
+/*
         for (int i = 0; i < SYMBOL_COUNT; i++)
             for (int j = 0; j < TOP_K; j++) {
                 lim_vec[i][j].alloc(state_count);
             }
+*/
     }
 
     if (kernel == AS_NFA) {
@@ -167,7 +169,8 @@ bool TransitionGraph::load_nfa_file(char *file_name) {
 
                 // We find a self-looping / persis state
                 if (src == dst && start == 0 && end == 255) {
-                    if (kernel == iNFA || kernel == TKO_NFA) {
+                    //if (kernel == iNFA || kernel == TKO_NFA) {
+                    if (kernel == iNFA) {
                         persis_states.push_back(src);
                         persis_states_vector.set_bit(src);
                     }
@@ -280,19 +283,35 @@ bool TransitionGraph::load_nfa_file(char *file_name) {
     file.close();
     if (kernel == iNFA) merge_transitions();
     if (kernel == TKO_NFA) {
-        for (int i = 0; i < SYMBOL_COUNT; i++) {
-            for (int j = 0; j < TOP_K; j++)
-                top_k_offset_per_symbol[i * TOP_K + j] = 0;
+        for (int i = 0; i <= SYMBOL_COUNT; i++) {
+            optimal_k_per_symbol[i] = 0;
         }
+
+        vector<pair<int, set<Transition>>> vec[SYMBOL_COUNT];
+#pragma omp parallel for
+        for (int i = 0; i < SYMBOL_COUNT; i++) {
+            vec[i] = _sort_(lim_tran_per_symbol_per_offset[i]);
+            for (auto it = vec[i].begin(); it != vec[i].end(); it++) {
+                if (it->second.size()<=(state_count/8)/sizeof(ST_T) || optimal_k_per_symbol[i+1] >= MAX_K) {
+                    break;
+                }
+                optimal_k_per_symbol[i+1]+=1;
+            }
+        }
+#pragma omp barrier
+
+    for (int i=1;i<=SYMBOL_COUNT; i++) optimal_k_per_symbol[i] = optimal_k_per_symbol[i-1]+optimal_k_per_symbol[i];
+    top_k_offset_per_symbol = new int [optimal_k_per_symbol[SYMBOL_COUNT]];
+    lim_jump_with_offset = new vector<ST_T> [optimal_k_per_symbol[SYMBOL_COUNT]];
+    lim_vec = new StateVector [optimal_k_per_symbol[SYMBOL_COUNT]];
+    for (int i=0; i<optimal_k_per_symbol[SYMBOL_COUNT]; i++) lim_vec[i].alloc(state_count);
 
 #pragma omp parallel for
         for (int i = 0; i < SYMBOL_COUNT; i++) {
-            vector<pair<int, set<Transition>>> vec =
-                _sort_(lim_tran_per_symbol_per_offset[i]);
             int j = -1;
-            for (auto it = vec.begin(); it != vec.end(); it++) {
+            for (auto it = vec[i].begin(); it != vec[i].end(); it++) {
                 j++;
-                if (j >= TOP_K) {
+                if (it->second.size()<=(state_count/8)/sizeof(ST_T) || j >= MAX_K) {
                     for (auto itt = it->second.begin(); itt != it->second.end();
                          itt++) {
                         transitions_per_symbol[i].push_back((*itt));
@@ -300,19 +319,19 @@ bool TransitionGraph::load_nfa_file(char *file_name) {
                     }
                     continue;
                 }
-                top_k_offset_per_symbol[i * TOP_K + j] = it->first;
+                top_k_offset_per_symbol[optimal_k_per_symbol[i] + j] = it->first;
                 for (auto itt = it->second.begin(); itt != it->second.end();
                      itt++)
-                    lim_jump_with_offset[i][j].push_back(itt->src);
+                    lim_jump_with_offset[optimal_k_per_symbol[i] + j].push_back(itt->src);
             }
         }
 #pragma omp barrier
 
 #pragma omp parallel for
         for (int i = 0; i < SYMBOL_COUNT; i++) {
-            for (int j = 0; j < TOP_K; j++) {
-                for (int k = 0; k < lim_jump_with_offset[i][j].size(); k++) {
-                    lim_vec[i][j].set_bit(lim_jump_with_offset[i][j][k]);
+            for (int j = optimal_k_per_symbol[i]; j < optimal_k_per_symbol[i+1]; j++) {
+                for (int k = 0; k < lim_jump_with_offset[j].size(); k++) {
+                    lim_vec[j].set_bit(lim_jump_with_offset[j][k]);
                 }
             }
         }

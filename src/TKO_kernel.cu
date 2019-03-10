@@ -1,6 +1,7 @@
 #include "src/nfa_kernels.h"
 
 __constant__ int c_transition_offset[SYMBOL_COUNT + 1];
+__constant__ int c_optimal_k_per_symbol[SYMBOL_COUNT + 1];
 
 // iNFAnt traversal algorithm to process multiple strings on a NFA
 // input                        :  total input string
@@ -16,7 +17,8 @@ __global__ void TKO_kernel(unsigned char *input, int *input_offset,
                            //                        int *transition_offset,
                            ST_BLOCK *init_states_vector,
                            ST_BLOCK *final_states_vector,
-                           int *top_k_offset_per_symbol, ST_BLOCK *lim_vector,
+                           int *top_k_offset_per_symbol,
+                           ST_BLOCK *lim_vector,
                            int vector_len) {
     // Skip to the right input string
     input += input_offset[block_ID];
@@ -93,12 +95,11 @@ BYPASS_HEAD:
 
         c = (int)(input[byt]);
 
-        for (int i = 0; i < TOP_K; i++) {
-            int offset = top_k_offset_per_symbol[c * TOP_K + i];
+        for (int i = c_optimal_k_per_symbol[c]; i < c_optimal_k_per_symbol[c+1]; i++) {
+            int offset = top_k_offset_per_symbol[i];
             for (int j = thread_ID; j < vector_len; j += thread_count) {
                 workspace_vec[j] =
-                    lim_vector[c * vector_len * TOP_K + i * vector_len + j] &
-                    current_st_vec[j];
+                    lim_vector[i * vector_len + j] & current_st_vec[j];
             }
             __syncthreads();
 
@@ -326,6 +327,12 @@ void run_TKO(struct ita_scratch &scratch, unsigned char **h_input_array,
                cudaMemcpyHostToDevice);
     if (cudaSuccess != cudaMemcpyToSymbol(c_transition_offset,
                                           scratch.tg->offset_per_symbol,
+                                          sizeof(int) * (SYMBOL_COUNT + 1))) {
+        cout << "Error!\n";
+        exit(-1);
+    }
+    if (cudaSuccess != cudaMemcpyToSymbol(c_optimal_k_per_symbol,
+                                          scratch.tg->optimal_k_per_symbol,
                                           sizeof(int) * (SYMBOL_COUNT + 1))) {
         cout << "Error!\n";
         exit(-1);

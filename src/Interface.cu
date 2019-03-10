@@ -60,9 +60,9 @@ void allocScratch(struct ita_scratch &scratch) {
         cudaMalloc((void **)&(scratch.d_init_st_vec),
                    sizeof(ST_BLOCK) * vec_len);
         cudaMalloc((void **)&(scratch.d_lim_vec),
-                   sizeof(ST_BLOCK) * vec_len * SYMBOL_COUNT * TOP_K);
+                   sizeof(ST_BLOCK) * vec_len * scratch.tg->optimal_k_per_symbol[SYMBOL_COUNT]);
         cudaMalloc((void **)&(scratch.d_top_k_offset_per_symbol),
-                   sizeof(int) * SYMBOL_COUNT * TOP_K);
+                   sizeof(int) * scratch.tg->optimal_k_per_symbol[SYMBOL_COUNT]);
 
         cudaMemcpy(scratch.d_transition_list, scratch.tg->transition_list,
                    sizeof(Transition) * scratch.tg->transition_count,
@@ -71,14 +71,12 @@ void allocScratch(struct ita_scratch &scratch) {
                    sizeof(ST_BLOCK) * vec_len, cudaMemcpyHostToDevice);
         cudaMemcpy(scratch.d_top_k_offset_per_symbol,
                    scratch.tg->top_k_offset_per_symbol,
-                   sizeof(int) * SYMBOL_COUNT * TOP_K, cudaMemcpyHostToDevice);
-        for (int i = 0; i < SYMBOL_COUNT; i++) {
-            for (int j = 0; j < TOP_K; j++) {
+                   sizeof(int) * scratch.tg->optimal_k_per_symbol[SYMBOL_COUNT], cudaMemcpyHostToDevice);
+        for (int i = 0; i < scratch.tg->optimal_k_per_symbol[SYMBOL_COUNT]; i++) {
                 cudaMemcpy(
-                    &(scratch.d_lim_vec[i * TOP_K * vec_len + j * vec_len]),
-                    scratch.tg->lim_vec[i][j].vector,
+                    &(scratch.d_lim_vec[i * vec_len]),
+                    scratch.tg->lim_vec[i].vector,
                     sizeof(ST_BLOCK) * vec_len, cudaMemcpyHostToDevice);
-            }
         }
     }
     if (scratch.tg->kernel == AS_NFA) {
