@@ -1,7 +1,7 @@
 #include "src/nfa_kernels.h"
 
-__constant__ int c_transition_offset[SYMBOL_COUNT + 1];
-__constant__ int c_optimal_k_per_symbol[SYMBOL_COUNT + 1];
+__constant__ int c_ad_transition_offset[SYMBOL_COUNT + 1];
+__constant__ int c_ad_optimal_k_per_symbol[SYMBOL_COUNT + 1];
 
 __global__ void admatch_kernel(unsigned char *input, int *input_offset,
                           ST_BLOCK *as_transition_table,
@@ -84,7 +84,7 @@ BYPASS_HEAD:
         local_active_num = blockReduceSum(local_active_num);
 
         c = (int)(input[byt]);
-        if ( (c_optimal_k_per_symbol[c+1] - c_optimal_k_per_symbol[c])>local_active_num){
+        if ( (c_ad_optimal_k_per_symbol[c+1] - c_ad_optimal_k_per_symbol[c])>local_active_num){
             // For each transition triggered by the character
             for (int blk = 0; blk < vector_len; blk++) {
                 int tmp = current_st_vec[blk];
@@ -103,7 +103,7 @@ BYPASS_HEAD:
             }
         }
         else{
-            for (int i = c_optimal_k_per_symbol[c]; i < c_optimal_k_per_symbol[c+1]; i++) {
+            for (int i = c_ad_optimal_k_per_symbol[c]; i < c_ad_optimal_k_per_symbol[c+1]; i++) {
                 int offset = tko_top_k_offset_per_symbol[i];
                 for (int j = thread_ID; j < vector_len; j += thread_count) {
                     workspace_vec[j] =
@@ -159,8 +159,8 @@ BYPASS_HEAD:
                 }
             }
 
-            transition_start = c_transition_offset[c];
-            transition_count = c_transition_offset[c + 1] - transition_start;
+            transition_start = c_ad_transition_offset[c];
+            transition_count = c_ad_transition_offset[c + 1] - transition_start;
 
             // For each transition triggered by the character
             for (int i = thread_ID; i < transition_count; i += thread_count) {
@@ -333,13 +333,13 @@ void run_AD(struct ad_scratch &scratch, unsigned char **h_input_array,
     cudaMemcpy(d_input, h_input, total_input_bytes, cudaMemcpyHostToDevice);
     cudaMemcpy(d_input_offset, h_input_offset, sizeof(int) * (array_size + 1),
                cudaMemcpyHostToDevice);
-    if (cudaSuccess != cudaMemcpyToSymbol(c_transition_offset,
+    if (cudaSuccess != cudaMemcpyToSymbol(c_ad_transition_offset,
             scratch.tko_scratch->tg->offset_per_symbol,
             sizeof(int) * (SYMBOL_COUNT + 1))) {
     cout << "Error!\n";
     exit(-1);
     }
-    if (cudaSuccess != cudaMemcpyToSymbol(c_optimal_k_per_symbol,
+    if (cudaSuccess != cudaMemcpyToSymbol(c_ad_optimal_k_per_symbol,
             scratch.tko_scratch->tg->optimal_k_per_symbol,
             sizeof(int) * (SYMBOL_COUNT + 1))) {
     cout << "Error!\n";
