@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
                         "string_count")("s,s", "show regex matching result")(
         "p,p", "show profiling result")(
         "k,k", bpo::value<string>(&kernel_type)->default_value("iNFA"),
-        "kernel type [iNFA], [TKO], [AS], iNFA by default")("help,h", "Helper");
+        "kernel type [iNFA], [TKO], [AS], [AD], iNFA by default")("help,h", "Helper");
 
     bpo::variables_map vm;
 
@@ -53,6 +53,7 @@ int main(int argc, char** argv) {
     if (!strcmp(kernel_type.c_str(), "iNFA")) flag |= INFA_KERNEL;
     if (!strcmp(kernel_type.c_str(), "TKO")) flag |= TKO_KERNEL;
     if (!strcmp(kernel_type.c_str(), "AS")) flag |= AS_KERNEL;
+    if (!strcmp(kernel_type.c_str(), "AD")) flag |= AD_MATCHER;
 
     if (string_count <= 0) {
         cerr << "Error: invalid string_count value " << string_count << endl;
@@ -72,11 +73,21 @@ int main(int argc, char** argv) {
     }
 
     vector<int> accepted_rules[string_count];
-    ita_scratch scratch(flag, nfa);
-    allocScratch(scratch);
-    BatchedScan(scratch, h_input_array, input_bytes_array, string_count,
-                accepted_rules);
-    freeScratch(scratch);
+
+    if(flag & AD_MATCHER) {
+        ad_scratch scratch(flag, nfa);
+        allocScratch(scratch);
+        BatchedScan(scratch, h_input_array, input_bytes_array, string_count,
+                    accepted_rules);
+        freeScratch(scratch);
+    }
+    else {
+        ita_scratch scratch(flag, nfa);
+        allocScratch(scratch);
+        BatchedScan(scratch, h_input_array, input_bytes_array, string_count,
+                    accepted_rules);
+        freeScratch(scratch);
+    }
 
     return EXIT_SUCCESS;
 }

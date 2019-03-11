@@ -33,7 +33,8 @@ ita_scratch::ita_scratch(ITA_FLAGS flags, char *nfa) {
 
 ad_scratch::ad_scratch(ITA_FLAGS flags, char *nfa){
     flag = flags;
-    infa_scratch = new ita_scratch((flag^AD_MATCHER)|INFA_KERNEL, nfa);
+    //infa_scratch = new ita_scratch((flag^AD_MATCHER)|INFA_KERNEL, nfa);
+    infa_scratch = nullptr;
     tko_scratch = new ita_scratch((flag^AD_MATCHER)|TKO_KERNEL, nfa);
     as_scratch = new ita_scratch((flag^AD_MATCHER)|AS_KERNEL, nfa);
 }
@@ -114,8 +115,8 @@ void allocScratch(struct ita_scratch &scratch) {
     }
 }
 
-void ad_allocScratch(struct ad_scratch &scratch){
-    allocScratch(*(scratch.infa_scratch));
+void allocScratch(struct ad_scratch &scratch){
+    // allocScratch(*(scratch.infa_scratch));
     allocScratch(*(scratch.tko_scratch));
     allocScratch(*(scratch.as_scratch));
 }
@@ -140,8 +141,8 @@ void freeScratch(struct ita_scratch &scratch) {
     }
 }
 
-void ad_freeScratch(struct ad_scratch &scratch){
-    freeScratch(*(scratch.infa_scratch));
+void freeScratch(struct ad_scratch &scratch){
+    // freeScratch(*(scratch.infa_scratch));
     freeScratch(*(scratch.tko_scratch));
     freeScratch(*(scratch.as_scratch));
 }
@@ -158,7 +159,7 @@ void Scan(struct ita_scratch &scratch, char *text,
             accepted_rules);
 }
 
-void ad_Scan(struct ad_scratch &scratch, char *text,
+void Scan(struct ad_scratch &scratch, char *text,
             vector<int> *accepted_rules){
     unsigned char *h_input_array[1];
     int input_bytes_array[1];
@@ -183,7 +184,7 @@ void BatchedScan(struct ita_scratch &scratch, char **text, int *text_len,
             accepted_rules);
 }
 
-void ad_BatchedScan(struct ad_scratch &scratch, char **text, int *text_len,
+void BatchedScan(struct ad_scratch &scratch, char **text, int *text_len,
     int str_count, vector<int> *accepted_rules) {
     unsigned char *h_input_array[str_count];
 

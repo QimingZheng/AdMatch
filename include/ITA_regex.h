@@ -47,19 +47,24 @@ struct ad_scratch{
 
 // alloc gpu-mem and record them in scratch
 void allocScratch(struct ita_scratch &scratch);
+void allocScratch(struct ad_scratch &scratch);
 
 // free gpu-mem
 void freeScratch(struct ita_scratch &scratch);
+void freeScratch(struct ad_scratch &scratch);
 
 // single input string scan, results of match will be recorded into accepted_rules
 // this scan mode looks like most CPU-end regex-engine like pcre/re2/hyperscan
 // but please remember:
 //      sequential mode is much less effective than batched mode
 void Scan(struct ita_scratch &scratch, char *text, vector<int> *accepted_rules);
+void Scan(struct ad_scratch &scratch, char *text, vector<int> *accepted_rules);
 
 // batched input strings scan, much more efficient
 // Use this mode whenever possible! larger batch size (str_count), higher efficiency
 void BatchedScan(struct ita_scratch &scratch, char **text, int *text_len,
+                 int str_count, vector<int> *accepted_rules);
+void BatchedScan(struct ad_scratch &scratch, char **text, int *text_len,
                  int str_count, vector<int> *accepted_rules);
 
 #endif
