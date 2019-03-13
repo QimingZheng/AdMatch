@@ -4,6 +4,7 @@
 #include <assert.h>
 #include <map>
 #include <set>
+#include <unordered_set>
 #include <unordered_map>
 #include <vector>
 
@@ -13,6 +14,7 @@
 using namespace std;
 
 enum Kernel_Type { iNFA, TKO_NFA, AS_NFA };
+
 
 // Transition source and destination tuple
 class Transition {
@@ -35,6 +37,17 @@ class Transition {
 
     friend bool operator==(const Transition& t1, const Transition& t2) {
         return t1.src == t2.src && t1.dst == t2.dst;
+    }
+};
+
+
+class HashFunc
+{
+public:
+    std::size_t operator()(const Transition &t) const
+    {
+        return  std::hash<ST_T>()(t.src) +
+                    std::hash<ST_T>()(t.dst);
     }
 };
 
@@ -80,7 +93,8 @@ class TransitionGraph {
     int* optimal_k_per_symbol; // [SYMBOL_COUNT + 1]; optimal_k_per_symbol[k+1] - optimal_k_per_symbol[k] = optimal k for symbol[k]
     int* top_k_offset_per_symbol;         //[optimal_k_per_symbol[SYMBOL_COUNT+1]];
     vector<ST_T>* lim_jump_with_offset;  //[optimal_k_per_symbol[SYMBOL_COUNT+1]];
-    map<int, set<Transition> > lim_tran_per_symbol_per_offset[SYMBOL_COUNT];
+    map<int, unordered_set<Transition, HashFunc> > lim_tran_per_symbol_per_offset[SYMBOL_COUNT];
+    //map<int, set<Transition> > lim_tran_per_symbol_per_offset[SYMBOL_COUNT];
     StateVector* lim_vec;  //[optimal_k_per_symbol[SYMBOL_COUNT+1]];
     int total_transition_count;
 

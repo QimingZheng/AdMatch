@@ -13,6 +13,18 @@
 
 using namespace boost;
 
+bool cmp(const pair<int, unordered_set<Transition, HashFunc>> &a,
+         const pair<int, unordered_set<Transition, HashFunc>> &b) {
+    return a.second.size() > b.second.size();
+}
+
+vector<pair<int, unordered_set<Transition, HashFunc>>> _sort_(map<int, unordered_set<Transition, HashFunc>> &_map_) {
+    vector<pair<int, unordered_set<Transition, HashFunc>>> vec(_map_.begin(), _map_.end());
+    sort(vec.begin(), vec.end(), cmp);
+    return vec;
+}
+
+/*
 bool cmp(const pair<int, set<Transition>> &a,
          const pair<int, set<Transition>> &b) {
     return a.second.size() > b.second.size();
@@ -23,6 +35,7 @@ vector<pair<int, set<Transition>>> _sort_(map<int, set<Transition>> &_map_) {
     sort(vec.begin(), vec.end(), cmp);
     return vec;
 }
+*/
 
 TransitionGraph::TransitionGraph(Kernel_Type k_t) {
     kernel = k_t;
@@ -189,8 +202,8 @@ bool TransitionGraph::load_nfa_file(char *file_name) {
                                     Transition(src, dst));
                             else {
                                 lim_tran_per_symbol_per_offset[t].insert(
-                                    pair<int, set<Transition>>(
-                                        0, set<Transition>()));
+                                    pair<int, unordered_set<Transition, HashFunc>>(
+                                        0, unordered_set<Transition, HashFunc>()));
                                 lim_tran_per_symbol_per_offset[t][0].insert(
                                     Transition(src, dst));
                             }
@@ -221,8 +234,8 @@ bool TransitionGraph::load_nfa_file(char *file_name) {
                                         .insert(Transition(src, dst));
                                 else {
                                     lim_tran_per_symbol_per_offset[symbol]
-                                        .insert(pair<int, set<Transition>>(
-                                            dst - src, set<Transition>()));
+                                        .insert(pair<int, unordered_set<Transition, HashFunc>>(
+                                            dst - src, unordered_set<Transition, HashFunc>()));
                                     lim_tran_per_symbol_per_offset[symbol][dst -
                                                                            src]
                                         .insert(Transition(src, dst));
@@ -287,7 +300,7 @@ bool TransitionGraph::load_nfa_file(char *file_name) {
             optimal_k_per_symbol[i] = 0;
         }
 
-        vector<pair<int, set<Transition>>> vec[SYMBOL_COUNT];
+        vector<pair<int, unordered_set<Transition, HashFunc>>> vec[SYMBOL_COUNT];
 #pragma omp parallel for
         for (int i = 0; i < SYMBOL_COUNT; i++) {
             vec[i] = _sort_(lim_tran_per_symbol_per_offset[i]);
