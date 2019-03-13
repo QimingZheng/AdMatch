@@ -87,7 +87,6 @@ int main(int argc, char** argv) {
     inputfile_dump(input_string.c_str(), str);
     char* nfa = strdup(nfa_file.c_str());
 
-    cout<<strlen(str)<<endl;
     for (int i = 0; i < string_count; i++) {
         h_input_array[i] = str;
         input_bytes_array[i] = strlen(str);
