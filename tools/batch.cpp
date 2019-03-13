@@ -10,6 +10,22 @@
 namespace bpo = boost::program_options;
 using namespace std;
 
+void inputfile_dump(char *filename, char &*input_string){
+    int file_size = 0;
+    vector<string> strs;
+    string str;
+    while(getline(cin, str)){
+        strs.push_back(str);
+        file_size += str.size();
+    }
+    input_string = new char[file_size];
+    for(int i=0; i<strs.size(); i++){
+        for (int j=0; j<strs[i].size(); j++){
+            input_string.push_back(char(strs[i][j]));
+        }
+    }
+}
+
 int main(int argc, char** argv) {
     bool show_match_result = false, profiler_mode = false;
     string nfa_file, input_string, kernel_type;
@@ -64,7 +80,8 @@ int main(int argc, char** argv) {
     char* h_input_array[string_count];    // array of string
     int input_bytes_array[string_count];  // array of string length
 
-    char* str = strdup(input_string.c_str());
+    char* str = NULL;
+    inputfile_dump(input_string.c_str(), str);
     char* nfa = strdup(nfa_file.c_str());
 
     for (int i = 0; i < string_count; i++) {
