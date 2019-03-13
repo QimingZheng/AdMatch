@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <boost/program_options.hpp>
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
 #include "string.h"
@@ -10,18 +11,20 @@
 namespace bpo = boost::program_options;
 using namespace std;
 
-void inputfile_dump(char *filename, char &*input_string){
+void inputfile_dump(const char *filename, char *&input_string){
+    ifstream fin(filename);
     int file_size = 0;
     vector<string> strs;
     string str;
-    while(getline(cin, str)){
+    while(getline(fin, str)){
         strs.push_back(str);
         file_size += str.size();
     }
     input_string = new char[file_size];
+    int counter = 0;
     for(int i=0; i<strs.size(); i++){
         for (int j=0; j<strs[i].size(); j++){
-            input_string.push_back(char(strs[i][j]));
+            input_string[counter++] = char(strs[i][j]);
         }
     }
 }
@@ -84,6 +87,7 @@ int main(int argc, char** argv) {
     inputfile_dump(input_string.c_str(), str);
     char* nfa = strdup(nfa_file.c_str());
 
+    cout<<strlen(str)<<endl;
     for (int i = 0; i < string_count; i++) {
         h_input_array[i] = str;
         input_bytes_array[i] = strlen(str);
