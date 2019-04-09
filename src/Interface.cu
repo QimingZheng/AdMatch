@@ -31,6 +31,14 @@ ita_scratch::ita_scratch(ITA_FLAGS flags, char *nfa) {
     }
 }
 
+ad_scratch::ad_scratch(ITA_FLAGS flags, char *nfa){
+    flag = flags;
+    //infa_scratch = new ita_scratch((flag^AD_MATCHER)|INFA_KERNEL, nfa);
+    infa_scratch = nullptr;
+    tko_scratch = new ita_scratch((flag^AD_MATCHER)|TKO_KERNEL, nfa);
+    as_scratch = new ita_scratch((flag^AD_MATCHER)|AS_KERNEL, nfa);
+}
+
 void allocScratch(struct ita_scratch &scratch) {
     int vec_len = scratch.tg->init_states_vector.block_count;
     if (scratch.tg->kernel == iNFA) {
@@ -107,6 +115,12 @@ void allocScratch(struct ita_scratch &scratch) {
     }
 }
 
+void allocScratch(struct ad_scratch &scratch){
+    // allocScratch(*(scratch.infa_scratch));
+    allocScratch(*(scratch.tko_scratch));
+    allocScratch(*(scratch.as_scratch));
+}
+
 void freeScratch(struct ita_scratch &scratch) {
     if (scratch.tg->kernel == iNFA) {
         cudaFree(scratch.d_transition_list);
@@ -127,8 +141,26 @@ void freeScratch(struct ita_scratch &scratch) {
     }
 }
 
+void freeScratch(struct ad_scratch &scratch){
+    // freeScratch(*(scratch.infa_scratch));
+    freeScratch(*(scratch.tko_scratch));
+    freeScratch(*(scratch.as_scratch));
+}
+
 void Scan(struct ita_scratch &scratch, char *text,
-          vector<int> *accepted_rules) {
+            vector<int> *accepted_rules) {
+    unsigned char *h_input_array[1];
+    int input_bytes_array[1];
+    h_input_array[0] = (unsigned char *)text;
+    input_bytes_array[0] = strlen(text);
+
+    run_nfa(scratch, h_input_array, input_bytes_array, 1, 1024,
+            scratch.flag & SHOW_RESULTS, scratch.flag & PROFILER_MODE,
+            accepted_rules);
+}
+
+void Scan(struct ad_scratch &scratch, char *text,
+            vector<int> *accepted_rules){
     unsigned char *h_input_array[1];
     int input_bytes_array[1];
     h_input_array[0] = (unsigned char *)text;
@@ -150,4 +182,17 @@ void BatchedScan(struct ita_scratch &scratch, char **text, int *text_len,
     run_nfa(scratch, h_input_array, text_len, str_count, 32,
             scratch.flag & SHOW_RESULTS, scratch.flag & PROFILER_MODE,
             accepted_rules);
+}
+
+void BatchedScan(struct ad_scratch &scratch, char **text, int *text_len,
+    int str_count, vector<int> *accepted_rules) {
+    unsigned char *h_input_array[str_count];
+
+    for (int i = 0; i < str_count; i++) {
+        h_input_array[i] = (unsigned char *)text[i];
+    }
+
+    run_nfa(scratch, h_input_array, text_len, str_count, 32,
+    scratch.flag & SHOW_RESULTS, scratch.flag & PROFILER_MODE,
+    accepted_rules);
 }

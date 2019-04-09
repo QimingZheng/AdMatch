@@ -17,4 +17,9 @@ void run_nfa(struct ita_scratch &scratch, unsigned char **h_input_array,
              bool show_match_result, bool profiler_mode,
              vector<int> *accepted_rules);
 
+void run_nfa(struct ad_scratch &scratch, unsigned char **h_input_array,
+             int *input_bytes_array, int array_size, int threads_per_block,
+             bool show_match_result, bool profiler_mode,
+             vector<int> *accepted_rules);
+
 #endif

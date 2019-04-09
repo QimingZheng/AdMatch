@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <boost/program_options.hpp>
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
 #include "string.h"
@@ -9,6 +10,24 @@
 
 namespace bpo = boost::program_options;
 using namespace std;
+
+void inputfile_dump(const char *filename, char *&input_string){
+    ifstream fin(filename);
+    int file_size = 0;
+    vector<string> strs;
+    string str;
+    while(getline(fin, str)){
+        strs.push_back(str);
+        file_size += str.size();
+    }
+    input_string = new char[file_size];
+    int counter = 0;
+    for(int i=0; i<strs.size(); i++){
+        for (int j=0; j<strs[i].size(); j++){
+            input_string[counter++] = char(strs[i][j]);
+        }
+    }
+}
 
 int main(int argc, char** argv) {
     bool show_match_result = false, profiler_mode = false;
@@ -26,7 +45,7 @@ int main(int argc, char** argv) {
                         "string_count")("s,s", "show regex matching result")(
         "p,p", "show profiling result")(
         "k,k", bpo::value<string>(&kernel_type)->default_value("iNFA"),
-        "kernel type [iNFA], [TKO], [AS], iNFA by default")("help,h", "Helper");
+        "kernel type [iNFA], [TKO], [AS], [AD], iNFA by default")("help,h", "Helper");
 
     bpo::variables_map vm;
 
@@ -53,6 +72,7 @@ int main(int argc, char** argv) {
     if (!strcmp(kernel_type.c_str(), "iNFA")) flag |= INFA_KERNEL;
     if (!strcmp(kernel_type.c_str(), "TKO")) flag |= TKO_KERNEL;
     if (!strcmp(kernel_type.c_str(), "AS")) flag |= AS_KERNEL;
+    if (!strcmp(kernel_type.c_str(), "AD")) flag |= AD_MATCHER;
 
     if (string_count <= 0) {
         cerr << "Error: invalid string_count value " << string_count << endl;
@@ -63,7 +83,8 @@ int main(int argc, char** argv) {
     char* h_input_array[string_count];    // array of string
     int input_bytes_array[string_count];  // array of string length
 
-    char* str = strdup(input_string.c_str());
+    char* str = NULL;
+    inputfile_dump(input_string.c_str(), str);
     char* nfa = strdup(nfa_file.c_str());
 
     for (int i = 0; i < string_count; i++) {
@@ -72,11 +93,21 @@ int main(int argc, char** argv) {
     }
 
     vector<int> accepted_rules[string_count];
-    ita_scratch scratch(flag, nfa);
-    allocScratch(scratch);
-    BatchedScan(scratch, h_input_array, input_bytes_array, string_count,
-                accepted_rules);
-    freeScratch(scratch);
+
+    if(flag & AD_MATCHER) {
+        ad_scratch scratch(flag, nfa);
+        allocScratch(scratch);
+        BatchedScan(scratch, h_input_array, input_bytes_array, string_count,
+                    accepted_rules);
+        freeScratch(scratch);
+    }
+    else {
+        ita_scratch scratch(flag, nfa);
+        allocScratch(scratch);
+        BatchedScan(scratch, h_input_array, input_bytes_array, string_count,
+                    accepted_rules);
+        freeScratch(scratch);
+    }
 
     return EXIT_SUCCESS;
 }
