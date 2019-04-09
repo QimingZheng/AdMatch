@@ -1,6 +1,6 @@
 # ITA-regex
 
-Please Click Star! 求点星星！第一次这么认真开源东西.
+Please Click Star! 
 
 ## What's ITA-regex
 
@@ -58,8 +58,3 @@ For examples of using these ITA-regex, please turn to tools/sequence.cpp and too
 After installation, you will find the ita library under **BUILD**/lib, and a handy command line tool *bin/batch* under **BUILD**/bin.
 
 ## TODO
-
-Add new feature of automatic adjusting:
-  - threads_per_block
-  - kernel_selection
-UTs
