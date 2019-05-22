@@ -59,6 +59,6 @@ Please notice that, I have coverred many mainstream GPU's arch-flags in the CMak
 
 ## Contribution
 
-If you have better idea in implement a high efficient gpu-regex engine, you can implement the kernel in an individual .cu file (like iNFA_kernel.cu AS_kernel.cu TKO_kernel.cu) and make a pull request. If possible append a document on the key idea of your kernel algorithm.
+If you have better ideas in implementing a high efficient gpu-regex engine, you can implement the kernel in an individual .cu file (like iNFA_kernel.cu AS_kernel.cu TKO_kernel.cu) and make a pull request. If possible, please append a document on the key idea of your kernel algorithm.
 
 **Welcome to contribute !!!**
