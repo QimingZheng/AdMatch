@@ -1,14 +1,14 @@
-# ITA-regex
+# AdMatch
 
-Please Click Star! 
+Please Click Star!
 
-## What's ITA-regex
+## What's AdMatch
 
-The acronym ITA is made of the initial letters of **i**NFA, **T**KO-iNFA and **A**S-NFA.
+Combination of several GPU-regex matching engines, including: **iNFA**, **TKO-iNFA** and **AS-NFA** and **AdMatch**.
 *iNFA*, *TKO-iNFA* and *AS-NFA* are three type of gpu-kernel algorithms for regular expression matching task.
-ITA-regex provide these three kernel mode for users to select.
+AdMatch-regex adaptively switch to the most suitable kernel in each matching step.
 
-## ITA Performance
+## AdMatch Performance
 
 | Engine Type |  Processing Time Per Request (us) | Acceleration-Ratio |
 | -- | -- | -- |
@@ -17,11 +17,11 @@ ITA-regex provide these three kernel mode for users to select.
 | RE2 | 462 | 9.56X |
 | HyperScan | 127 | 34.77X |
 | iNFA | 7258 | 0.61X |
-| ITA | 62 | 71.23X |
+| AdMatch | 62 | 71.23X |
 
 Based on **CRS rule set** & **Bing Search Request**.
 
-## How To Use ITA
+## How To Use AdMatch
 
 Interfaces we exposed are listed as follows:
 
@@ -39,22 +39,14 @@ void BatchedScan(struct ita_scratch &scratch, char **text, int *text_len,
 ```
 
 For interpretations for these interfaces, please turn to include/ITA_regex.h, you only need to include ITA_regex.h,
-provide regex file, and set appropriate flags, then feed input strings to ITA, ITA will do the rest for you.
+provide regex file, and set appropriate flags, then feed input strings to it, *AdMatch* will do the rest for you.
 
-For examples of using these ITA-regex, please turn to tools/sequence.cpp and tools/batch.cpp.
+For examples of using these AdMatch-regex, please turn to tools/sequence.cpp and tools/batch.cpp.
+
+Testing scripts can be found under directory script/.
 
 ## Installation Prerequest
 
 - CUDA Library
 - nvcc Compiler
 - Boost Library
-
-## Installation Procedures
-
-1. Specify a **BUILD** directory to install, *./* by default.
-2. You need to modify the gpu-arch flag in the Makefile according to the computability of your device.
-3. make
-
-After installation, you will find the ita library under **BUILD**/lib, and a handy command line tool *bin/batch* under **BUILD**/bin.
-
-## TODO
