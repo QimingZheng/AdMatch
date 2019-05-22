@@ -53,7 +53,7 @@ Testing scripts can be found under directory script/.
 
 ## Install
 
-Go to you installation root directory, cmake <CMakeFile-Path>.
+Go to you installation root directory, cmake \<CMakeFile-Path\>.
   
 Please notice that, I have coverred many mainstream GPU's arch-flags in the CMakeLists.txt, while in case your device type is not included, please check it prior your installation. The compiled tools may run on unspecified devices without warnning or report errors, but the matching results will be incorrect and the timing results could be extreme short (like 1e-5 ms, because kernel launch failed).
 
