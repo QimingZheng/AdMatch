@@ -50,3 +50,9 @@ Testing scripts can be found under directory script/.
 - CUDA Library
 - nvcc Compiler
 - Boost Library
+
+## Contribution
+
+If you have better idea in implement a high efficient gpu-regex engine, you can implement the kernel in an individual .cu file (like iNFA_kernel.cu AS_kernel.cu TKO_kernel.cu) and make a pull request. If possible append a document on the key idea of your kernel algorithm.
+
+**Welcome to contribute !!!**
