@@ -51,6 +51,12 @@ Testing scripts can be found under directory script/.
 - nvcc Compiler
 - Boost Library
 
+## Install
+
+Go to you installation root directory, cmake <CMakeFile-Path>.
+  
+Please notice that, I have coverred many mainstream GPU's arch-flags in the CMakeLists.txt, while in case your device type is not included, please check it prior your installation. The compiled tools may run on unspecified devices without warnning or report errors, but the matching results will be incorrect and the timing results could be extreme short (like 1e-5 ms, because kernel launch failed).
+
 ## Contribution
 
 If you have better idea in implement a high efficient gpu-regex engine, you can implement the kernel in an individual .cu file (like iNFA_kernel.cu AS_kernel.cu TKO_kernel.cu) and make a pull request. If possible append a document on the key idea of your kernel algorithm.
