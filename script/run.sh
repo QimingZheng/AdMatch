@@ -82,18 +82,23 @@ python script.py group/group_9.txt ${CMD}
 
 echo "Grouping Done."
 
-echo "Begine Matching ... "
+echo "Begin Matching ... "
 
-export LD_LIBRARY_PATH=../lib/:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=../build/lib/:$LD_LIBRARY_PATH
 
-../bin/batch  -f group/group_0.txt -i ../data/bing.txt -n 1024 -p -k iNFA
-../bin/batch  -f group/group_1.txt -i ../data/bing.txt -n 1024 -p -k iNFA
-../bin/batch  -f group/group_2.txt -i ../data/bing.txt -n 1024 -p -k iNFA
-../bin/batch  -f group/group_3.txt -i ../data/bing.txt -n 1024 -p -k iNFA
-../bin/batch  -f group/group_4.txt -i ../data/bing.txt -n 1024 -p -k iNFA
-../bin/batch  -f group/group_5.txt -i ../data/bing.txt -n 1024 -p -k iNFA
 
-../bin/batch  -f group/group_6.txt -i ../data/bing.txt -n 1024 -p -k AS
-../bin/batch  -f group/group_7.txt -i ../data/bing.txt -n 1024 -p -k AS
-../bin/batch  -f group/group_8.txt -i ../data/bing.txt -n 1024 -p -k AS
-../bin/batch  -f group/group_9.txt -i ../data/bing.txt -n 1024 -p -k AS
+:<<H
+../build/tools/batch  -f group/group_0.txt -i ../data/bing.txt -n 1024 -p -k iNFA
+../build/tools/batch  -f group/group_1.txt -i ../data/bing.txt -n 1024 -p -k iNFA
+../build/tools/batch  -f group/group_2.txt -i ../data/bing.txt -n 1024 -p -k iNFA
+../build/tools/batch  -f group/group_3.txt -i ../data/bing.txt -n 1024 -p -k iNFA
+../build/tools/batch  -f group/group_4.txt -i ../data/bing.txt -n 1024 -p -k iNFA
+../build/tools/batch  -f group/group_5.txt -i ../data/bing.txt -n 1024 -p -k iNFA
+
+../build/tools/batch  -f group/group_6.txt -i ../data/bing.txt -n 1024 -p -k AS
+../build/tools/batch  -f group/group_7.txt -i ../data/bing.txt -n 1024 -p -k AS
+../build/tools/batch  -f group/group_8.txt -i ../data/bing.txt -n 1024 -p -k AS
+../build/tools/batch  -f group/group_9.txt -i ../data/bing.txt -n 1024 -p -k AS
+H
+
+../build/tools/batch  -f group/group_6.txt -i ../data/bing.txt -n 1024 -p -k AD
